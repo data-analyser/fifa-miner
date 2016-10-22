@@ -1,0 +1,20 @@
+# Common #
+*.class
+*.patch
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Idea #
+*.iml
+*.ipr
+*.iws
+*.ids
+.idea/
+
+# Gradle #
+build/
+out/
+.gradle/
