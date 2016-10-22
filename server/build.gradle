@@ -7,3 +7,12 @@ targetCompatibility = 1.8
 repositories {
     mavenCentral()
 }
+
+dependencies {
+    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.3.13.v20161014'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.21'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+}
