@@ -1,0 +1,6 @@
+dbConnection:
+  username: root
+  password: 1111
+  host: localhost
+  port: 27017
+  database: fifa
