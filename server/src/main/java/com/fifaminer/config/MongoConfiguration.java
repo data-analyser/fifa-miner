@@ -14,9 +14,6 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import static com.google.common.collect.ImmutableList.of;
 import static com.mongodb.MongoCredential.createMongoCRCredential;
 
-/**
- * Created by Alexandr on 23.10.2016.
- */
 @Configuration
 public class MongoConfiguration {
 

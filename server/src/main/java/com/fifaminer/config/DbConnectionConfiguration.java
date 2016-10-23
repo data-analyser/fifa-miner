@@ -5,9 +5,6 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * Created by Alexandr on 23.10.2016.
- */
 @Component
 @ConfigurationProperties(prefix = "dbConnection")
 public class DbConnectionConfiguration {
