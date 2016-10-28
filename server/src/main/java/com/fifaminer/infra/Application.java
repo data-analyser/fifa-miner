@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @ComponentScan("com.fifaminer")
 @EnableAutoConfiguration
 @EnableConfigurationProperties
-@EnableMongoRepositories
+@EnableMongoRepositories(basePackages = "com.fifaminer.repository" )
 public class Application {
 
     public static void main(String[] args) {
