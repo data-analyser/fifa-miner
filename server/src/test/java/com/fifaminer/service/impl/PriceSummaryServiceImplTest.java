@@ -2,7 +2,6 @@ package com.fifaminer.service.impl;
 
 import com.fifaminer.model.PriceSummary;
 import com.fifaminer.service.PriceSummaryService;
-import com.fifaminer.util.NumbersHelper;
 import org.junit.Test;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -12,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class PriceSummaryServiceImplTest {
 
-    private final PriceSummaryService priceSummaryService = new PriceSummaryServiceImpl(new NumbersHelper());
+    private final PriceSummaryService priceSummaryService = new PriceSummaryServiceImpl();
 
     private final Long timestamp = Long.MAX_VALUE;
 
@@ -41,15 +40,9 @@ public class PriceSummaryServiceImplTest {
     }
 
     @Test
-    public void calculatePriceSummaryFindClosestAsAverage() {
-        PriceSummary priceSummary = priceSummaryService.calculatePriceSummary(timestamp, newArrayList(10, 50, 70, 100));
-        assertPriceSummary(priceSummary, 10, 50, 100);
-    }
-
-    @Test
-    public void calculatePriceSummaryMinFromClosest() {
-        PriceSummary priceSummary = priceSummaryService.calculatePriceSummary(timestamp, newArrayList(10, 30));
-        assertPriceSummary(priceSummary, 10, 10, 30);
+    public void calculatePriceSummaryIntegerAverage() {
+        PriceSummary priceSummary = priceSummaryService.calculatePriceSummary(timestamp, newArrayList(11, 120));
+        assertPriceSummary(priceSummary, 11, 65, 120);
     }
 
     @Test
