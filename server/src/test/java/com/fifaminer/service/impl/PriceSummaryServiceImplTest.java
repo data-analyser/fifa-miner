@@ -60,8 +60,8 @@ public class PriceSummaryServiceImplTest {
 
     private void assertPriceSummary(PriceSummary priceSummary, Integer min, Integer avg, Integer max) {
         assertThat(priceSummary.getTimestamp(), is(timestamp));
-        assertThat(priceSummary.getMinPrice(), is(min));
-        assertThat(priceSummary.getAveragePrice(), is(avg));
-        assertThat(priceSummary.getMaxPrice(), is(max));
+        assertThat(priceSummary.getMin(), is(min));
+        assertThat(priceSummary.getAvg(), is(avg));
+        assertThat(priceSummary.getMax(), is(max));
     }
 }

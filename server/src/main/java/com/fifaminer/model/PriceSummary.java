@@ -8,7 +8,7 @@ import lombok.Data;
 public final class PriceSummary {
 
     private final Long timestamp;
-    private final Integer minPrice;
-    private final Integer averagePrice;
-    private final Integer maxPrice;
+    private final Integer min;
+    private final Integer avg;
+    private final Integer max;
 }
