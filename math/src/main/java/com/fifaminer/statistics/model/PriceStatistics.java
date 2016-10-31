@@ -1,14 +1,14 @@
-package com.fifaminer.model;
+package com.fifaminer.statistics.model;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public final class PriceSummary {
+public final class PriceStatistics {
 
     private final Long timestamp;
     private final Integer min;
-    private final Integer avg;
-    private final Integer max;
+    private final Integer median;
 }
