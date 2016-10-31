@@ -14,10 +14,10 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public Integer median(List<Integer> values) {
         values.sort(Integer::compare);
-        return calculateMedan(values);
+        return calculateMedian(values);
     }
 
-    private Integer calculateMedan(List<Integer> sortedValues) {
+    private Integer calculateMedian(List<Integer> sortedValues) {
         DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
         sortedValues.forEach(descriptiveStatistics::addValue);
         return Double.valueOf(descriptiveStatistics.getPercentile(MEDIAN_PERCENTILE))
