@@ -1,6 +1,10 @@
-package com.fifaminer.service.impl;
+package com.fifaminer.service.price.impl;
 
-import com.fifaminer.service.*;
+import com.fifaminer.service.price.PriceHistoryService;
+import com.fifaminer.service.price.PriceService;
+import com.fifaminer.service.price.PriceStatisticsService;
+import com.fifaminer.service.price.policy.impl.BuyPriceDefinitionPolicy;
+import com.fifaminer.service.price.policy.impl.SellPriceDefinitionPolicy;
 import com.fifaminer.statistics.model.PriceStatistics;
 import com.fifaminer.timeseries.TimeSeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static java.lang.Long.compare;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 
@@ -20,33 +25,49 @@ public class PriceServiceIml implements PriceService {
     private final PriceHistoryService priceHistoryService;
     private final PriceStatisticsService priceStatisticsService;
     private final TimeSeriesService timeSeriesService;
+    private final BuyPriceDefinitionPolicy buyPolicy;
+    private final SellPriceDefinitionPolicy sellPolicy;
 
     @Autowired
     public PriceServiceIml(PriceHistoryService priceHistoryService,
                            PriceStatisticsService priceStatisticsService,
-                           TimeSeriesService timeSeriesService) {
+                           TimeSeriesService timeSeriesService,
+                           BuyPriceDefinitionPolicy buyPolicy,
+                           SellPriceDefinitionPolicy sellPolicy) {
         this.priceHistoryService = priceHistoryService;
         this.priceStatisticsService = priceStatisticsService;
         this.timeSeriesService = timeSeriesService;
+        this.buyPolicy = buyPolicy;
+        this.sellPolicy = sellPolicy;
     }
 
     @Override
     public Integer getBuyPrice(Long playerId) {
-        return 0;
+        List<PriceStatistics> priceStatistics = calculateStatistics(
+                priceHistoryService.findByPlayerId(playerId).getHistory()
+        );
+
+        Double forecastedMin = timeSeriesService.forecast(
+                extractProperty(priceStatistics, value -> value.getMin().doubleValue())
+        );
+        return buyPolicy.define(priceStatistics, forecastedMin);
     }
 
     @Override
     public Integer getSellPrice(Long playerId) {
-        List<PriceStatistics> priceStatistics = calculateStatistics(priceHistoryService.findByPlayerId(playerId).getHistory());
-
-        Double forecastedMin = timeSeriesService.forecast(
-                extractProperty(priceStatistics, value -> value.getMin().doubleValue())
+        List<PriceStatistics> priceStatistics = calculateStatistics(
+                priceHistoryService.findByPlayerId(playerId).getHistory()
         );
 
         Double forecastedMedian = timeSeriesService.forecast(
                 extractProperty(priceStatistics, value -> value.getMedian().doubleValue())
         );
-        return 0;
+        return sellPolicy.define(forecastedMedian);
+    }
+
+    @Override
+    public Integer getProfit(Long playerId) {
+        return getSellPrice(playerId) - getBuyPrice(playerId);
     }
 
     private List<Double> extractProperty(List<PriceStatistics> priceStatistics,
@@ -60,11 +81,12 @@ public class PriceServiceIml implements PriceService {
         return history.entrySet()
                 .stream()
                 .map(entry -> priceStatisticsService.calculatePriceStatistics(entry.getKey(), getPrices(entry.getValue())))
-                .filter(hasNoZeroStats())
+                .sorted((current, next) -> compare(current.getTimestamp(), next.getTimestamp()))
+                .filter(withoutZeroStats())
                 .collect(toList());
     }
 
-    private Predicate<PriceStatistics> hasNoZeroStats() {
+    private Predicate<PriceStatistics> withoutZeroStats() {
         return value -> !value.getMin().equals(INTEGER_ZERO) && !value.getMedian().equals(INTEGER_ZERO);
     }
 

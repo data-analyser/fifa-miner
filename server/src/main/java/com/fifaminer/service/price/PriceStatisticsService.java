@@ -1,4 +1,4 @@
-package com.fifaminer.service;
+package com.fifaminer.service.price;
 
 import com.fifaminer.statistics.model.PriceStatistics;
 
