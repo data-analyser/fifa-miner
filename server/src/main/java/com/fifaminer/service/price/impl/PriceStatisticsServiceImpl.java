@@ -1,6 +1,6 @@
-package com.fifaminer.service.impl;
+package com.fifaminer.service.price.impl;
 
-import com.fifaminer.service.PriceStatisticsService;
+import com.fifaminer.service.price.PriceStatisticsService;
 import com.fifaminer.statistics.StatisticsService;
 import com.fifaminer.statistics.model.PriceStatistics;
 import org.springframework.beans.factory.annotation.Autowired;

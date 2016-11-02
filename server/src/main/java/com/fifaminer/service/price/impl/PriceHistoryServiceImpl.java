@@ -1,8 +1,8 @@
-package com.fifaminer.service.impl;
+package com.fifaminer.service.price.impl;
 
 import com.fifaminer.entity.PriceHistory;
 import com.fifaminer.repository.PriceHistoryRepository;
-import com.fifaminer.service.PriceHistoryService;
+import com.fifaminer.service.price.PriceHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.fifaminer.resource;
 
-import com.fifaminer.service.PriceService;
+import com.fifaminer.service.price.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,5 +35,12 @@ public class PriceResource {
     @Produces(APPLICATION_JSON)
     public Integer getSellPrice(@PathParam("playerId") Long playerId) {
         return priceService.getSellPrice(playerId);
+    }
+
+    @GET
+    @Path("{playerId}" + PROFIT)
+    @Produces(APPLICATION_JSON)
+    public Integer getProfit(@PathParam("playerId") Long playerId) {
+        return priceService.getProfit(playerId);
     }
 }
