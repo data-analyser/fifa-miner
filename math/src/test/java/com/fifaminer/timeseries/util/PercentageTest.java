@@ -1,5 +1,6 @@
 package com.fifaminer.timeseries.util;
 
+import com.fifaminer.util.Percentage;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

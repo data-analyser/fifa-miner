@@ -1,6 +1,6 @@
 package com.fifaminer.service.price.policy.impl;
 
-import com.fifaminer.timeseries.util.Percentage;
+import com.fifaminer.util.Percentage;
 import org.springframework.stereotype.Component;
 
 @Component

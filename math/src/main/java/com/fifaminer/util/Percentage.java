@@ -1,4 +1,4 @@
-package com.fifaminer.timeseries.util;
+package com.fifaminer.util;
 
 import java.math.BigDecimal;
 
