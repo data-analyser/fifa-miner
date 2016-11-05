@@ -1,6 +1,6 @@
 package com.fifaminer.service.price;
 
-import com.fifaminer.statistics.model.PriceStatistics;
+import com.fifaminer.service.price.model.PriceStatistics;
 
 import java.util.List;
 
