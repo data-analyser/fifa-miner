@@ -1,10 +1,15 @@
 package com.fifaminer.service.transaction;
 
+import com.fifaminer.entity.Transaction;
 import com.fifaminer.entity.TransactionStatistics;
+
+import java.util.List;
 
 public interface TransactionAnalysingService {
 
-    TransactionStatistics analyse(Long playerId);
+    TransactionStatistics analyse(Transaction transaction);
 
-    void saveStatistics(TransactionStatistics transactionStatistics);
+    void saveAll(List<TransactionStatistics> transactionStatistics);
+
+    List<TransactionStatistics> findAll();
 }

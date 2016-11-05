@@ -1,5 +1,6 @@
 package com.fifaminer.service.price.impl;
 
+import com.fifaminer.entity.PriceHistory;
 import com.fifaminer.service.price.PriceHistoryService;
 import com.fifaminer.service.price.PriceService;
 import com.fifaminer.service.price.PriceStatisticsService;
@@ -16,7 +17,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static java.lang.Long.compare;
+import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.collections4.MapUtils.isEmpty;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 
 @Service
@@ -43,8 +46,12 @@ public class PriceServiceIml implements PriceService {
 
     @Override
     public Integer getBuyPrice(Long playerId) {
+        PriceHistory priceHistory = priceHistoryService.findByPlayerId(playerId);
+
+        if (isNull(priceHistory) || isEmpty(priceHistory.getHistory())) return INTEGER_ZERO;
+
         List<PriceStatistics> priceStatistics = calculateStatistics(
-                priceHistoryService.findByPlayerId(playerId).getHistory()
+                priceHistory.getHistory()
         );
 
         Double forecastedMin = timeSeriesService.forecast(
@@ -55,8 +62,12 @@ public class PriceServiceIml implements PriceService {
 
     @Override
     public Integer getSellPrice(Long playerId) {
+        PriceHistory priceHistory = priceHistoryService.findByPlayerId(playerId);
+
+        if (isNull(priceHistory) || isEmpty(priceHistory.getHistory())) return INTEGER_ZERO;
+
         List<PriceStatistics> priceStatistics = calculateStatistics(
-                priceHistoryService.findByPlayerId(playerId).getHistory()
+                priceHistory.getHistory()
         );
 
         Double forecastedMedian = timeSeriesService.forecast(

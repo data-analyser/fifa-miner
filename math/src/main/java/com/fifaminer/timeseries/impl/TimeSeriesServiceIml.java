@@ -22,6 +22,7 @@ import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 public class TimeSeriesServiceIml implements TimeSeriesService {
 
     private static final int MA_WINDOW = 2;
+    private static final String ALGORITHM = "css-cgd";
 
     @Override
     public Double forecast(List<Double> timeSeries) {
@@ -30,10 +31,14 @@ public class TimeSeriesServiceIml implements TimeSeriesService {
     }
 
     private Double forecastUsingARIMA(List<Double> timeSeries) {
-        Vector dataVector = Vectors.dense(toPrimitives(timeSeries));
-        Vector forecast = ARIMA.fitModel(1, 1, 0, dataVector, true, "css-cgd", null)
-                .forecast(dataVector, INTEGER_ONE);
-        return Iterables.getLast(toIterable(forecast.toArray()));
+        try {
+            Vector dataVector = Vectors.dense(toPrimitives(timeSeries));
+            Vector forecast = ARIMA.fitModel(1, 1, 0, dataVector, true, ALGORITHM, null)
+                    .forecast(dataVector, INTEGER_ONE);
+            return Iterables.getLast(toIterable(forecast.toArray()));
+        } catch (Exception e) {
+            return forecastUsingMA(timeSeries);
+        }
     }
 
     private Double forecastUsingMA(List<Double> timeSeries) {

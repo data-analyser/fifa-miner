@@ -6,6 +6,8 @@ import com.fifaminer.service.transaction.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
@@ -17,7 +19,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction findByPlayerId(Long playerId) {
-        return transactionRepository.findOne(playerId);
+    public List<Transaction> findAll() {
+        return transactionRepository.findAll();
     }
 }
