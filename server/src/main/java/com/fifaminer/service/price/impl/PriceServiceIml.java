@@ -5,7 +5,7 @@ import com.fifaminer.service.price.PriceService;
 import com.fifaminer.service.price.PriceStatisticsService;
 import com.fifaminer.service.price.policy.impl.BuyPriceDefinitionPolicy;
 import com.fifaminer.service.price.policy.impl.SellPriceDefinitionPolicy;
-import com.fifaminer.statistics.model.PriceStatistics;
+import com.fifaminer.service.price.model.PriceStatistics;
 import com.fifaminer.timeseries.TimeSeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

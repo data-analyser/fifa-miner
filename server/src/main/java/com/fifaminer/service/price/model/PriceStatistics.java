@@ -1,4 +1,4 @@
-package com.fifaminer.statistics.model;
+package com.fifaminer.service.price.model;
 
 
 import lombok.AllArgsConstructor;

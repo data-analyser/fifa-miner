@@ -1,6 +1,6 @@
 package com.fifaminer.service.price.policy.impl;
 
-import com.fifaminer.statistics.model.PriceStatistics;
+import com.fifaminer.service.price.model.PriceStatistics;
 import com.google.common.collect.Iterables;
 import org.springframework.stereotype.Component;
 
