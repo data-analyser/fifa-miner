@@ -23,7 +23,7 @@ public class ForecastingMovingAverage {
     }
 
     private boolean shouldFindAverage(double[] timeSeries, int window) {
-        return timeSeries.length - window == INTEGER_ONE;
+        return timeSeries.length <= window;
     }
 
     private Double getLast(double[] data) {
