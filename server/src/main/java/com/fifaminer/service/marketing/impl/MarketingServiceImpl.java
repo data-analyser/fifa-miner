@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static com.google.common.collect.Iterables.getLast;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 
@@ -31,7 +32,7 @@ public class MarketingServiceImpl implements MarketingService {
     public List<PlayerMarketing> findPlayersForMarketing() {
         return transactionAnalysingService.findAll()
                 .stream()
-                .sorted((current, next) -> Integer.compare(current.getRelistPercents(), next.getRelistPercents()))
+                .sorted((current, next) -> Integer.compare(getLast(current.getStatisticsData()).getRelistPercents(), getLast(next.getStatisticsData()).getRelistPercents()))
                 .map(statistics -> new PlayerMarketing(
                         statistics.getPlayerId(),
                         priceService.getBuyPrice(statistics.getPlayerId()),

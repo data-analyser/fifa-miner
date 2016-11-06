@@ -2,6 +2,7 @@ package com.fifaminer.service.transaction.impl;
 
 import com.fifaminer.entity.Transaction;
 import com.fifaminer.entity.Transaction.TransactionRecord;
+import com.fifaminer.entity.pojo.TransactionStatisticsData;
 import com.fifaminer.entity.pojo.TransactionType;
 import com.fifaminer.repository.TransactionAnalyseRepository;
 import com.fifaminer.service.common.ClockService;
@@ -17,7 +18,9 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static com.fifaminer.entity.pojo.TransactionType.*;
+import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.Long.compare;
+import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.math.NumberUtils.*;
 
@@ -56,8 +59,7 @@ public class TransactionAnalysingServiceImpl implements TransactionAnalysingServ
         List<TransactionRecord> records = transaction.getRecords();
         Long relists = getTransactionCountByType(records, RELIST);
 
-        return new TransactionStatistics(
-                transaction.getPlayerId(),
+        TransactionStatisticsData transactionStatisticsData = new TransactionStatisticsData(
                 clockService.now(),
                 getTransactionCountByType(records, BOUGHT_CARD, BOUGHT_BY_ROBOT),
                 getTransactionCountByType(records, PLACED_TO_MARKET),
@@ -68,6 +70,15 @@ public class TransactionAnalysingServiceImpl implements TransactionAnalysingServ
                 getMedianSellTime(records),
                 getMedianSellPrice(records)
         );
+
+        TransactionStatistics transactionStatistics = transactionAnalyseRepository.findOne(transaction.getPlayerId());
+
+        if (isNull(transactionStatistics)) {
+            return new TransactionStatistics(transaction.getPlayerId(), newArrayList(transactionStatisticsData));
+        }
+
+        transactionStatistics.getStatisticsData().add(transactionStatisticsData);
+        return transactionStatistics;
     }
 
     private Long getTransactionCountByType(List<TransactionRecord> records,
