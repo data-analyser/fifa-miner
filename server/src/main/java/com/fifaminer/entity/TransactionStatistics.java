@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-@Document(collection = "transaction_analyse")
+@Document(collection = "transactions_analyse")
 public final class TransactionStatistics {
 
     @Id
