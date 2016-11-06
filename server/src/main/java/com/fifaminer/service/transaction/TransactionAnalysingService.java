@@ -4,6 +4,7 @@ import com.fifaminer.entity.Transaction;
 import com.fifaminer.entity.TransactionStatistics;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TransactionAnalysingService {
 
@@ -12,4 +13,8 @@ public interface TransactionAnalysingService {
     void saveAll(List<TransactionStatistics> transactionStatistics);
 
     List<TransactionStatistics> findAll();
+
+    Optional<TransactionStatistics> findByPlayerId(Long playerId);
+
+    void save(TransactionStatistics transactionStatistics);
 }

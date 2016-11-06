@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static com.fifaminer.entity.pojo.TransactionType.*;
@@ -53,6 +54,16 @@ public class TransactionAnalysingServiceImpl implements TransactionAnalysingServ
     @Override
     public List<TransactionStatistics> findAll() {
         return transactionAnalyseRepository.findAll();
+    }
+
+    @Override
+    public Optional<TransactionStatistics> findByPlayerId(Long playerId) {
+        return Optional.ofNullable(transactionAnalyseRepository.findOne(playerId));
+    }
+
+    @Override
+    public void save(TransactionStatistics transactionStatistics) {
+        transactionAnalyseRepository.save(transactionStatistics);
     }
 
     private TransactionStatistics createStatistics(Transaction transaction) {

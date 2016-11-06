@@ -20,7 +20,7 @@ public class MarketingServiceImpl implements MarketingService {
     private final TransactionAnalysingService transactionAnalysingService;
     private final PriceService priceService;
 
-    private static final int PLAYERS_LIMIT = 100;
+    private static final int PLAYERS_LIMIT = 50;
 
     @Autowired
     public MarketingServiceImpl(TransactionAnalysingService transactionAnalysingService, PriceService priceService) {
