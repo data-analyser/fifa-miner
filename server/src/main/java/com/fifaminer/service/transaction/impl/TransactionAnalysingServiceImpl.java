@@ -68,15 +68,17 @@ public class TransactionAnalysingServiceImpl implements TransactionAnalysingServ
 
     private TransactionStatistics createStatistics(Transaction transaction) {
         List<TransactionRecord> records = transaction.getRecords();
+
         Long relists = getTransactionCountByType(records, RELIST);
+        Long sells = getTransactionCountByType(records, SELL_CARD);
 
         TransactionStatisticsData transactionStatisticsData = new TransactionStatisticsData(
                 clockService.now(),
                 getTransactionCountByType(records, BOUGHT_CARD, BOUGHT_BY_ROBOT),
                 getTransactionCountByType(records, PLACED_TO_MARKET),
-                getTransactionCountByType(records, SELL_CARD),
-                relists,
+                sells, relists,
                 Long.valueOf(records.size()),
+                Percentage.ofTotal(records.size(), sells.intValue()),
                 Percentage.ofTotal(records.size(), relists.intValue()),
                 getMedianSellTime(records),
                 getMedianSellPrice(records)

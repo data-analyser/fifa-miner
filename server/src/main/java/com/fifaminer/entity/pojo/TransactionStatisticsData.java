@@ -13,6 +13,7 @@ public class TransactionStatisticsData {
     private final Long sellCount;
     private final Long relistCount;
     private final Long allTransactionsCount;
+    private final Integer sellPercents;
     private final Integer relistPercents;
     private final Integer medianSellTime;
     private final Integer medianSellPrice;
