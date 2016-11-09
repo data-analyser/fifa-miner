@@ -13,14 +13,10 @@ public class NumbersServiceImpl implements NumbersService {
         return orderedValues.contains(value) ? value : getClosestValue(value, orderedValues);
     }
 
-    private Integer getClosestValue(Integer value, List<Integer> values) {
-        for (int index = 0; index < values.size(); index++) {
-            int current = values.get(index);
-            int next = values.get(index + 1);
-            if (current < value && next > value) {
-                return next;
-            }
-        }
-        throw new IllegalStateException("Cannot find closest value");
+    private Integer getClosestValue(Integer value, List<Integer> orderedValues) {
+        return orderedValues.stream()
+                .filter(orderedValue -> orderedValue > value)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Cannot find closest value"));
     }
 }
