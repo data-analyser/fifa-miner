@@ -1,9 +1,7 @@
 package com.fifaminer.service.price.impl;
 
 import com.fifaminer.entity.PriceHistory;
-import com.fifaminer.service.price.PriceHistoryService;
-import com.fifaminer.service.price.PriceService;
-import com.fifaminer.service.price.PriceStatisticsService;
+import com.fifaminer.service.price.*;
 import com.fifaminer.service.price.policy.impl.BuyPriceDefinitionPolicy;
 import com.fifaminer.service.price.policy.impl.SellPriceDefinitionPolicy;
 import com.fifaminer.service.price.model.PriceStatistics;
@@ -30,18 +28,21 @@ public class PriceServiceIml implements PriceService {
     private final TimeSeriesService timeSeriesService;
     private final BuyPriceDefinitionPolicy buyPolicy;
     private final SellPriceDefinitionPolicy sellPolicy;
+    private final TaxService taxService;
 
     @Autowired
     public PriceServiceIml(PriceHistoryService priceHistoryService,
                            PriceStatisticsService priceStatisticsService,
                            TimeSeriesService timeSeriesService,
                            BuyPriceDefinitionPolicy buyPolicy,
-                           SellPriceDefinitionPolicy sellPolicy) {
+                           SellPriceDefinitionPolicy sellPolicy,
+                           TaxService taxService) {
         this.priceHistoryService = priceHistoryService;
         this.priceStatisticsService = priceStatisticsService;
         this.timeSeriesService = timeSeriesService;
         this.buyPolicy = buyPolicy;
         this.sellPolicy = sellPolicy;
+        this.taxService = taxService;
     }
 
     @Override
@@ -78,7 +79,7 @@ public class PriceServiceIml implements PriceService {
 
     @Override
     public Integer getProfit(Long playerId) {
-        return getSellPrice(playerId) - getBuyPrice(playerId);
+        return taxService.reduceTax(getSellPrice(playerId) - getBuyPrice(playerId));
     }
 
     private List<Double> extractProperty(List<PriceStatistics> priceStatistics,

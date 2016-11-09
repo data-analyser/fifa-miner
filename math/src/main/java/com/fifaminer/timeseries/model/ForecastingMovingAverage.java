@@ -1,5 +1,6 @@
 package com.fifaminer.timeseries.model;
 
+import static com.fifaminer.timeseries.util.ForecastingPrecondition.isSingular;
 import static java.util.Arrays.stream;
 import static org.apache.commons.lang3.math.NumberUtils.*;
 
@@ -16,14 +17,14 @@ public class ForecastingMovingAverage {
         double[] evaluatedMovingAverage = movingAverage.evaluate();
         int window = movingAverage.getWindow();
 
-        if (shouldFindAverage(timeSeries, window)) {
+        if (shouldNotFindAverage(timeSeries, window)) {
             return getLast(timeSeries);
         }
         return getLast(evaluatedMovingAverage) + ((DOUBLE_ONE / window) * reduceLastByWindow(window, timeSeries));
     }
 
-    private boolean shouldFindAverage(double[] timeSeries, int window) {
-        return timeSeries.length <= window;
+    private boolean shouldNotFindAverage(double[] timeSeries, int window) {
+        return (timeSeries.length <= window) || isSingular(timeSeries);
     }
 
     private Double getLast(double[] data) {
