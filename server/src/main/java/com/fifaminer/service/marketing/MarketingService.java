@@ -7,4 +7,6 @@ import java.util.List;
 public interface MarketingService {
 
     List<PlayerMarketing> findPlayersForMarketing();
+
+    List<PlayerMarketing> findMostSellingPlayers();
 }

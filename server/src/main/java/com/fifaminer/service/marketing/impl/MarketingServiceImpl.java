@@ -1,5 +1,6 @@
 package com.fifaminer.service.marketing.impl;
 
+import com.fifaminer.entity.TransactionStatistics;
 import com.fifaminer.service.marketing.MarketingService;
 import com.fifaminer.service.marketing.model.PlayerMarketing;
 import com.fifaminer.service.price.PriceService;
@@ -7,10 +8,11 @@ import com.fifaminer.service.transaction.TransactionAnalysingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.google.common.collect.Iterables.getLast;
+import static com.fifaminer.service.marketing.strategy.PlayerSortingStrategy.*;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 
@@ -30,9 +32,18 @@ public class MarketingServiceImpl implements MarketingService {
 
     @Override
     public List<PlayerMarketing> findPlayersForMarketing() {
+        return findPlayersBy(minRelists());
+    }
+
+    @Override
+    public List<PlayerMarketing> findMostSellingPlayers() {
+        return findPlayersBy(maxSells());
+    }
+
+    private List<PlayerMarketing> findPlayersBy(Comparator<TransactionStatistics> sortingStrategy) {
         return transactionAnalysingService.findAll()
                 .stream()
-                .sorted((current, next) -> Integer.compare(getLast(current.getStatisticsData()).getRelistPercents(), getLast(next.getStatisticsData()).getRelistPercents()))
+                .sorted(sortingStrategy)
                 .map(statistics -> new PlayerMarketing(
                         statistics.getPlayerId(),
                         priceService.getBuyPrice(statistics.getPlayerId()),

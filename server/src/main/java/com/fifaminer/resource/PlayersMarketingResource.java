@@ -11,7 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-import static com.fifaminer.resource.UrlPath.MARKETING;
+import static com.fifaminer.resource.UrlPath.*;
 
 @Component
 @Path(MARKETING)
@@ -28,5 +28,12 @@ public class PlayersMarketingResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<PlayerMarketing> findPlayersForMarketing() {
         return marketingService.findPlayersForMarketing();
+    }
+
+    @GET
+    @Path(MOST_SELLING)
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PlayerMarketing> findMostSellingPlayers() {
+        return marketingService.findMostSellingPlayers();
     }
 }
