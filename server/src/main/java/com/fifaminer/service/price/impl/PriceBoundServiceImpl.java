@@ -45,7 +45,7 @@ public class PriceBoundServiceImpl implements PriceBoundService {
     @Override
     public Integer arrangeToBound(Integer amount) {
         Preconditions.checkArgument(amount <= MAX_BID, "Cannot configure bound");
-        return amount < INTEGER_ZERO ? MIN_BID : applyBounds(amount);
+        return amount < MIN_BID ? MIN_BID : applyBounds(amount);
     }
 
     private List<Integer> generateBounds(Integer lower, Integer upper, Integer step) {
