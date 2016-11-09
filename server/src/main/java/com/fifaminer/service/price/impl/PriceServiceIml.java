@@ -79,7 +79,7 @@ public class PriceServiceIml implements PriceService {
 
     @Override
     public Integer getProfit(Long playerId) {
-        return taxService.reduceTax(getSellPrice(playerId) - getBuyPrice(playerId));
+        return taxService.reduceTax(getSellPrice(playerId)) - getBuyPrice(playerId);
     }
 
     private List<Double> extractProperty(List<PriceStatistics> priceStatistics,
