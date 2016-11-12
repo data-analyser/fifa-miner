@@ -36,7 +36,7 @@ public class SettingsResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateSetting(@Valid SettingConfigurationTO settingConfigurationTo) {
-        settingsService.updateSetting(converter.fromTo(settingConfigurationTo));
+        settingsService.updateSetting(converter.fromTO(settingConfigurationTo));
         return Response.ok().build();
     }
 }

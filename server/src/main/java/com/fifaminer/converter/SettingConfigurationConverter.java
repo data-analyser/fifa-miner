@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SettingConfigurationConverter {
 
-    public SettingConfiguration fromTo(SettingConfigurationTO settingConfigurationTO) {
+    public SettingConfiguration fromTO(SettingConfigurationTO settingConfigurationTO) {
         return new SettingConfiguration(
                 settingConfigurationTO.getSetting(),
                 settingConfigurationTO.getValue()
