@@ -2,9 +2,12 @@ package com.fifaminer.service.price.impl;
 
 import com.fifaminer.entity.PriceHistory;
 import com.fifaminer.service.price.*;
+import com.fifaminer.service.price.model.PlayerPrice;
 import com.fifaminer.service.price.policy.impl.BuyPriceDefinitionPolicy;
 import com.fifaminer.service.price.policy.impl.SellPriceDefinitionPolicy;
 import com.fifaminer.service.price.model.PriceStatistics;
+import com.fifaminer.service.setting.SettingsService;
+import com.fifaminer.service.setting.type.Setting;
 import com.fifaminer.timeseries.TimeSeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static com.fifaminer.service.setting.type.Setting.BUY_PRICE_STRATEGY;
+import static com.fifaminer.service.setting.type.Setting.SELL_PRICE_STRATEGY;
 import static java.lang.Long.compare;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
@@ -29,6 +34,7 @@ public class PriceServiceIml implements PriceService {
     private final BuyPriceDefinitionPolicy buyPolicy;
     private final SellPriceDefinitionPolicy sellPolicy;
     private final TaxService taxService;
+    private final SettingsService settingsService;
 
     @Autowired
     public PriceServiceIml(PriceHistoryService priceHistoryService,
@@ -36,13 +42,15 @@ public class PriceServiceIml implements PriceService {
                            TimeSeriesService timeSeriesService,
                            BuyPriceDefinitionPolicy buyPolicy,
                            SellPriceDefinitionPolicy sellPolicy,
-                           TaxService taxService) {
+                           TaxService taxService,
+                           SettingsService settingsService) {
         this.priceHistoryService = priceHistoryService;
         this.priceStatisticsService = priceStatisticsService;
         this.timeSeriesService = timeSeriesService;
         this.buyPolicy = buyPolicy;
         this.sellPolicy = sellPolicy;
         this.taxService = taxService;
+        this.settingsService = settingsService;
     }
 
     @Override
@@ -84,6 +92,18 @@ public class PriceServiceIml implements PriceService {
     @Override
     public Integer getProfit(Long playerId) {
         return taxService.reduceTax(getSellPrice(playerId)) - getBuyPrice(playerId);
+    }
+
+    @Override
+    public PlayerPrice getPlayerPriceInfo(Long playerId) {
+        return new PlayerPrice(
+                playerId,
+                getBuyPrice(playerId),
+                getSellPrice(playerId),
+                getProfit(playerId),
+                settingsService.getSetting(BUY_PRICE_STRATEGY),
+                settingsService.getSetting(SELL_PRICE_STRATEGY)
+        );
     }
 
     private List<Double> extractProperty(List<PriceStatistics> priceStatistics,
