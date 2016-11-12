@@ -1,6 +1,4 @@
-package com.fifaminer.client.builder;
-
-import com.fifaminer.client.impl.FifaMinerClientImpl;
+package com.fifaminer.client.impl;
 
 public class FifaMinerClientBuilder {
 

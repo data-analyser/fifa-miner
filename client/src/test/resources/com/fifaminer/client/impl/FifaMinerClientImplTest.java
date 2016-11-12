@@ -1,7 +1,6 @@
 package com.fifaminer.client.impl;
 
 import com.fifaminer.client.FifaMinerClient;
-import com.fifaminer.client.builder.FifaMinerClientBuilder;
 import org.junit.Test;
 
 public class FifaMinerClientImplTest {

@@ -18,7 +18,7 @@ public class FifaMinerClientImpl implements FifaMinerClient {
     private final String serverUrl;
     private final Integer port;
 
-    public FifaMinerClientImpl(String protocol,
+    FifaMinerClientImpl(String protocol,
                                String serverUrl,
                                Integer port) {
         this.client = Client.create();
