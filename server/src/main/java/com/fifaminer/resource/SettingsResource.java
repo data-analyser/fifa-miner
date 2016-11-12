@@ -33,7 +33,7 @@ public class SettingsResource {
         return settingsService.getSetting(setting);
     }
 
-    @POST
+    @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateSetting(@Valid SettingConfigurationTO settingConfigurationTo) {
         settingsService.updateSetting(converter.fromTO(settingConfigurationTo));
