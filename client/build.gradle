@@ -8,6 +8,12 @@ repositories {
     mavenCentral()
 }
 
+task fatJar(type: Jar) {
+    baseName = 'fifa-miner-' + project.name
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 dependencies {
     compile group: 'com.sun.jersey', name: 'jersey-client', version: '1.19.3'
     compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.24'
