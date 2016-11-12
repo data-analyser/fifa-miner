@@ -6,7 +6,7 @@ import com.fifaminer.util.Percentage;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Lower10ThanCurrentMin implements BuyPriceStrategy {
+public class Lower10ThanCurrentMinStrategy implements BuyPriceStrategy {
 
     private static final Integer PERCENTS = 10;
 

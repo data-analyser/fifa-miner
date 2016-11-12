@@ -2,7 +2,7 @@ package com.fifaminer.resource;
 
 import com.fifaminer.converter.SettingConfigurationConverter;
 import com.fifaminer.service.setting.SettingsService;
-import com.fifaminer.service.setting.model.SettingConfigurationTO;
+import com.fifaminer.client.dto.SettingConfigurationTO;
 import com.fifaminer.service.setting.type.Setting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
