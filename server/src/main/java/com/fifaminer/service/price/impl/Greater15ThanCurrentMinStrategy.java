@@ -7,7 +7,7 @@ import com.google.common.collect.Iterables;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Greater15ThanCurrentMin implements SellPriceStrategy {
+public class Greater15ThanCurrentMinStrategy implements SellPriceStrategy {
 
     private static final Integer PERCENTS = 15;
 
