@@ -14,7 +14,7 @@ public class SettingsServiceImpl implements SettingsService {
 
     private final SettingRepository settingRepository;
 
-    private static final String NO_SETTING = "Not configured";
+    private static final String DEFAULT = "Default";
 
     @Autowired
     public SettingsServiceImpl(SettingRepository settingRepository) {
@@ -24,7 +24,7 @@ public class SettingsServiceImpl implements SettingsService {
     @Override
     public String getSetting(Setting setting) {
         SettingConfiguration configuration = settingRepository.findOne(setting);
-        return isNull(configuration) ? NO_SETTING : configuration.getValue();
+        return isNull(configuration) ? DEFAULT : configuration.getValue();
     }
 
     @Override

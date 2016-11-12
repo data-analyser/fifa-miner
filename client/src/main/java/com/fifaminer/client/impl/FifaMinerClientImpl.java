@@ -2,6 +2,7 @@ package com.fifaminer.client.impl;
 
 import com.fifaminer.client.FifaMinerClient;
 import com.fifaminer.client.dto.PlayerMarketingTO;
+import com.fifaminer.client.dto.PlayerPriceTO;
 import com.fifaminer.client.dto.SettingConfigurationTO;
 import com.fifaminer.client.dto.SettingTO;
 import com.sun.jersey.api.client.Client;
@@ -80,6 +81,13 @@ public class FifaMinerClientImpl implements FifaMinerClient {
         return client.resource(getUrl("/marketing/most-selling"))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<PlayerMarketingTO>>(){});
+    }
+
+    @Override
+    public PlayerPriceTO getPriceSummary(Long playerId) {
+        return client.resource(getUrl("/prices/" + playerId + "/summary"))
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .get(PlayerPriceTO.class);
     }
 
     private String getUrl(String urlPath) {

@@ -1,6 +1,7 @@
 package com.fifaminer.client;
 
 import com.fifaminer.client.dto.PlayerMarketingTO;
+import com.fifaminer.client.dto.PlayerPriceTO;
 import com.fifaminer.client.dto.SettingConfigurationTO;
 import com.fifaminer.client.dto.SettingTO;
 
@@ -23,5 +24,7 @@ public interface FifaMinerClient {
     List<PlayerMarketingTO> getPlayersWithLowestRelists();
 
     List<PlayerMarketingTO> getMostSellingPlayers();
+
+    PlayerPriceTO getPriceSummary(Long playerId);
 }
 

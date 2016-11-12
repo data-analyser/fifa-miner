@@ -1,5 +1,7 @@
 package com.fifaminer.resource;
 
+import com.fifaminer.client.dto.PlayerPriceTO;
+import com.fifaminer.converter.PlayerPriceConverter;
 import com.fifaminer.service.price.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,10 +19,13 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 public class PriceResource {
 
     private final PriceService priceService;
+    private final PlayerPriceConverter converter;
 
     @Autowired
-    public PriceResource(PriceService priceService) {
+    public PriceResource(PriceService priceService,
+                         PlayerPriceConverter converter) {
         this.priceService = priceService;
+        this.converter = converter;
     }
 
     @GET
@@ -42,5 +47,12 @@ public class PriceResource {
     @Produces(APPLICATION_JSON)
     public Integer getProfit(@PathParam("playerId") Long playerId) {
         return priceService.getProfit(playerId);
+    }
+
+    @GET
+    @Path("{playerId}" + SUMMARY)
+    @Produces(APPLICATION_JSON)
+    public PlayerPriceTO getPlayerPrice(@PathParam("playerId") Long playerId) {
+        return converter.toTO(priceService.getPlayerPriceInfo(playerId));
     }
 }
