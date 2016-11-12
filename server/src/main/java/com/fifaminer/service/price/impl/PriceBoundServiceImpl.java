@@ -2,6 +2,7 @@ package com.fifaminer.service.price.impl;
 
 import com.fifaminer.service.common.NumbersService;
 import com.fifaminer.service.price.PriceBoundService;
+import com.fifaminer.service.price.type.BoundSelection;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Range;
@@ -43,9 +44,9 @@ public class PriceBoundServiceImpl implements PriceBoundService {
     }
 
     @Override
-    public Integer arrangeToBound(Integer amount) {
+    public Integer arrangeToBound(Integer amount, BoundSelection boundSelection) {
         Preconditions.checkArgument(amount <= MAX_BID, "Cannot configure bound");
-        return amount < MIN_BID ? MIN_BID : applyBounds(amount);
+        return amount < MIN_BID ? MIN_BID : applyBounds(amount, boundSelection);
     }
 
     private List<Integer> generateBounds(Integer lower, Integer upper, Integer step) {
@@ -55,10 +56,10 @@ public class PriceBoundServiceImpl implements PriceBoundService {
                 .collect(toList());
     }
 
-    private Integer applyBounds(Integer amount) {
+    private Integer applyBounds(Integer amount, BoundSelection boundSelection) {
         for (Entry<Range<Integer>, List<Integer>> bound : bounds.entrySet()) {
             if (bound.getKey().contains(amount)) {
-                return numbersService.findClosest(amount, bound.getValue());
+                return numbersService.findClosest(amount, bound.getValue(), boundSelection);
             }
         }
         return amount;

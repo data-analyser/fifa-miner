@@ -2,6 +2,7 @@ package com.fifaminer.service.price.policy.impl;
 
 import com.fifaminer.service.price.PriceBoundService;
 import com.fifaminer.service.price.TaxService;
+import com.fifaminer.service.price.type.BoundSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,8 @@ public class SellPriceDefinitionPolicy {
     }
 
     public Integer define(Double forecastedMedian) {
-        return priceBoundService.arrangeToBound(taxService.addTax(forecastedMedian.intValue()));
+        return priceBoundService.arrangeToBound(
+                taxService.addTax(forecastedMedian.intValue()), BoundSelection.HIGHER
+        );
     }
 }

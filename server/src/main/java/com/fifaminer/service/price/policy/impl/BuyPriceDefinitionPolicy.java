@@ -2,6 +2,7 @@ package com.fifaminer.service.price.policy.impl;
 
 import com.fifaminer.service.price.PriceBoundService;
 import com.fifaminer.service.price.model.PriceStatistics;
+import com.fifaminer.service.price.type.BoundSelection;
 import com.google.common.collect.Iterables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,6 @@ public class BuyPriceDefinitionPolicy {
         Integer currentMin = Iterables.getLast(priceStatistics)
                 .getMin();
         Integer buyPrice = forecastedMin < currentMin ? forecastedMin.intValue() : currentMin;
-        return priceBoundService.arrangeToBound(buyPrice);
+        return priceBoundService.arrangeToBound(buyPrice, BoundSelection.LOWER);
     }
 }
