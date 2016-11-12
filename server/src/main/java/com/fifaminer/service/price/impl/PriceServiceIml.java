@@ -74,7 +74,11 @@ public class PriceServiceIml implements PriceService {
         Double forecastedMedian = timeSeriesService.forecast(
                 extractProperty(priceStatistics, value -> value.getMedian().doubleValue())
         );
-        return sellPolicy.define(forecastedMedian);
+
+        Double forecastedMin = timeSeriesService.forecast(
+                extractProperty(priceStatistics, value -> value.getMin().doubleValue())
+        );
+        return sellPolicy.define(forecastedMin, forecastedMedian, priceStatistics);
     }
 
     @Override
