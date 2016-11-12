@@ -1,3 +1,4 @@
 rootProject.name = 'fifa-miner'
 include 'server'
 include 'math'
+include 'client'

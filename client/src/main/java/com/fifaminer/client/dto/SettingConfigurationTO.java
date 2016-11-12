@@ -1,10 +1,8 @@
-package com.fifaminer.service.setting.model;
+package com.fifaminer.client.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fifaminer.service.setting.type.Setting;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,20 +10,19 @@ import javax.validation.constraints.NotNull;
 public class SettingConfigurationTO {
 
     @NotNull
-    private final Setting setting;
+    private final SettingTO settingTO;
     @NotNull
-    @NotEmpty
     private final String value;
 
     @JsonCreator
-    public SettingConfigurationTO(@JsonProperty("setting") Setting setting,
+    public SettingConfigurationTO(@JsonProperty("settingTO") SettingTO settingTO,
                                   @JsonProperty("value") String value) {
-        this.setting = setting;
+        this.settingTO = settingTO;
         this.value = value;
     }
 
-    public Setting getSetting() {
-        return setting;
+    public SettingTO getSettingTO() {
+        return settingTO;
     }
 
     public String getValue() {
@@ -39,14 +36,14 @@ public class SettingConfigurationTO {
 
         SettingConfigurationTO that = (SettingConfigurationTO) o;
 
-        if (setting != that.setting) return false;
+        if (settingTO != that.settingTO) return false;
         return value != null ? value.equals(that.value) : that.value == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = setting != null ? setting.hashCode() : 0;
+        int result = settingTO != null ? settingTO.hashCode() : 0;
         result = 31 * result + (value != null ? value.hashCode() : 0);
         return result;
     }
