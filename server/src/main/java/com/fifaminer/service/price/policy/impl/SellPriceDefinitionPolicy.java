@@ -3,7 +3,7 @@ package com.fifaminer.service.price.policy.impl;
 import com.fifaminer.service.price.PriceBoundService;
 import com.fifaminer.service.price.SellPriceStrategyService;
 import com.fifaminer.service.price.TaxService;
-import com.fifaminer.service.price.model.PriceDefinitionContext;
+import com.fifaminer.service.price.model.SellPriceDefinitionContext;
 import com.fifaminer.service.price.model.PriceStatistics;
 import com.fifaminer.service.price.type.BoundSelection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +30,11 @@ public class SellPriceDefinitionPolicy {
     public Integer define(Double forecastedMin,
                           Double forecastedMedian,
                           List<PriceStatistics> priceStatistics) {
-        PriceDefinitionContext priceDefinitionContext = new PriceDefinitionContext(
+        SellPriceDefinitionContext sellPriceDefinitionContext = new SellPriceDefinitionContext(
                 forecastedMin.intValue(), forecastedMedian.intValue(), priceStatistics);
 
         Integer sellPriceByStrategy = sellPriceStrategyService.findActiveSellStrategy()
-                .calculate(priceDefinitionContext);
+                .calculate(sellPriceDefinitionContext);
 
         return priceBoundService.arrangeToBound(
                 taxService.addTax(sellPriceByStrategy), BoundSelection.HIGHER

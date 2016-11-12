@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public final class PriceDefinitionContext {
+public final class SellPriceDefinitionContext {
 
     private final Integer forecastedMin;
     private final Integer forecastedMedian;
