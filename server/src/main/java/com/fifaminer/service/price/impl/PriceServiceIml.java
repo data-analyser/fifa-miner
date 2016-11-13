@@ -17,8 +17,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static com.fifaminer.service.setting.type.Setting.BUY_PRICE_STRATEGY;
-import static com.fifaminer.service.setting.type.Setting.SELL_PRICE_STRATEGY;
+import static com.fifaminer.service.setting.type.Setting.*;
 import static java.lang.Long.compare;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
@@ -108,9 +107,11 @@ public class PriceServiceIml implements PriceService {
                 playerId,
                 getBuyPrice(playerId),
                 getSellPrice(playerId),
+                getBidPrice(playerId),
                 getProfit(playerId),
                 settingsService.getSetting(BUY_PRICE_STRATEGY),
-                settingsService.getSetting(SELL_PRICE_STRATEGY)
+                settingsService.getSetting(SELL_PRICE_STRATEGY),
+                settingsService.getSetting(BID_PRICE_STRATEGY)
         );
     }
 

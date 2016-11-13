@@ -12,9 +12,11 @@ public class PlayerPriceConverter {
                 playerPrice.getPlayerId(),
                 playerPrice.getBuyPrice(),
                 playerPrice.getSellPrice(),
+                playerPrice.getBidPrice(),
                 playerPrice.getProfit(),
                 playerPrice.getBuyPriceStrategy(),
-                playerPrice.getSellPriceStrategy()
+                playerPrice.getSellPriceStrategy(),
+                playerPrice.getBidPriceStrategy()
         );
     }
 }

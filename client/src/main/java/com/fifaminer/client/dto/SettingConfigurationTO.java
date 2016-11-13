@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SettingConfigurationTO {
+public final class SettingConfigurationTO {
 
     @NotNull
     private final SettingTO settingTO;

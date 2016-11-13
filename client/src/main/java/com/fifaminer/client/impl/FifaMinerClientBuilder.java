@@ -1,6 +1,6 @@
 package com.fifaminer.client.impl;
 
-public class FifaMinerClientBuilder {
+public final class FifaMinerClientBuilder {
 
     private String protocol;
     private String serverUrl;
