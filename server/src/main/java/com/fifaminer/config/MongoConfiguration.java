@@ -37,7 +37,10 @@ public class MongoConfiguration {
     }
 
     private MongoClient createMongoClient() {
-        return new MongoClient(createServerAddress(), of(createMongoCredential()));
+        if (dbConfiguration.isUseAuth()) {
+            return new MongoClient(createServerAddress(), of(createMongoCredential()));
+        }
+        return new MongoClient(createServerAddress());
     }
 
     private ServerAddress createServerAddress() {

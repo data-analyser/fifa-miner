@@ -10,15 +10,17 @@ import javax.validation.constraints.NotNull;
 public class DbConnectionConfiguration {
 
     @NotNull
-    private String username;
-    @NotNull
-    private String password;
-    @NotNull
     private String host;
     @NotNull
     private Integer port;
     @NotNull
     private String database;
+    @NotNull
+    private Boolean useAuth;
+    @NotNull
+    private String username;
+    @NotNull
+    private String password;
 
     public String getUsername() {
         return username;
@@ -58,5 +60,13 @@ public class DbConnectionConfiguration {
 
     public void setDatabase(String database) {
         this.database = database;
+    }
+
+    public Boolean isUseAuth() {
+        return useAuth;
+    }
+
+    public void setUseAuth(Boolean useAuth) {
+        this.useAuth = useAuth;
     }
 }
