@@ -1,22 +1,30 @@
 package com.fifaminer.service.marketing.strategy;
 
 import com.fifaminer.entity.TransactionStatistics;
+import com.fifaminer.service.marketing.type.OrderingType;
+import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 
+import static com.fifaminer.service.marketing.type.OrderingType.MAX_SELLS;
 import static com.google.common.collect.Iterables.getLast;
 
-public class PlayerSortingStrategy {
+@Component
+public class PlayerSortingFactory {
 
-    public static Comparator<TransactionStatistics> minRelists() {
+    public Comparator<TransactionStatistics> create(OrderingType orderingType) {
+        return orderingType.equals(MAX_SELLS) ? maxSells() : minRelists();
+    }
+
+    private Comparator<TransactionStatistics> minRelists() {
         return (current, next) -> Integer.compare(getLast(current.getStatisticsData()).getRelistPercents(), getLast(next.getStatisticsData()).getRelistPercents());
     }
 
-    public static Comparator<TransactionStatistics> maxSells() {
+    private Comparator<TransactionStatistics> maxSells() {
         return minSellsComparator().reversed();
     }
 
-    private static Comparator<TransactionStatistics> minSellsComparator() {
+    private Comparator<TransactionStatistics> minSellsComparator() {
         return (current, next) -> Integer.compare(getLast(current.getStatisticsData()).getSellPercents(), getLast(next.getStatisticsData()).getSellPercents());
     }
 }

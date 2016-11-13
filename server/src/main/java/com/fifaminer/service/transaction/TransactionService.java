@@ -7,4 +7,6 @@ import java.util.List;
 public interface TransactionService {
 
     List<Transaction> findAll();
+
+    List<Transaction> findRecordsWhereTimestampBetween(Long startTime, Long endTime);
 }

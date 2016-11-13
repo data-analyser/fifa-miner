@@ -1,7 +1,7 @@
 package com.fifaminer.client.impl;
 
 import com.fifaminer.client.FifaMinerClient;
-import com.fifaminer.client.dto.PlayerMarketingTO;
+import com.fifaminer.client.dto.OrderingTypeTO;
 import com.fifaminer.client.dto.PlayerPriceTO;
 import com.fifaminer.client.dto.SettingConfigurationTO;
 import com.fifaminer.client.dto.SettingTO;
@@ -9,6 +9,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
 import java.net.URL;
 import java.util.List;
 
@@ -77,24 +78,33 @@ public class FifaMinerClientImpl implements FifaMinerClient {
     }
 
     @Override
-    public List<PlayerMarketingTO> getPlayersWithLowestRelists() {
-        return client.resource(getUrl("/marketing"))
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .get(new GenericType<List<PlayerMarketingTO>>(){});
-    }
-
-    @Override
-    public List<PlayerMarketingTO> getMostSellingPlayers() {
-        return client.resource(getUrl("/marketing/most-selling"))
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .get(new GenericType<List<PlayerMarketingTO>>(){});
-    }
-
-    @Override
     public PlayerPriceTO getPriceSummary(Long playerId) {
         return client.resource(getUrl("/prices/" + playerId + "/summary"))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(PlayerPriceTO.class);
+    }
+
+    @Override
+    public List<PlayerPriceTO> findPlayersByTransactionsAnalyse(Long startTime,
+                                                                Long endTime,
+                                                                OrderingTypeTO orderingTypeTO,
+                                                                Integer limit) {
+        return client.resource(getUrl(buildMarketingRequestUrl(startTime, endTime, orderingTypeTO, limit)))
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .get(new GenericType<List<PlayerPriceTO>>(){});
+    }
+
+    private String buildMarketingRequestUrl(Long startTime,
+                                            Long endTime,
+                                            OrderingTypeTO orderingTypeTO,
+                                            Integer limit) {
+        return UriBuilder.fromPath("/marketing")
+                .queryParam("startTime", startTime)
+                .queryParam("endTime", endTime)
+                .queryParam("orderingType", orderingTypeTO)
+                .queryParam("limit", limit)
+                .build()
+                .toString();
     }
 
     private String getUrl(String urlPath) {
