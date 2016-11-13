@@ -1,12 +1,11 @@
 package com.fifaminer.service.marketing;
 
-import com.fifaminer.service.marketing.model.PlayerMarketing;
+import com.fifaminer.service.marketing.type.OrderingType;
+import com.fifaminer.service.price.model.PlayerPrice;
 
 import java.util.List;
 
 public interface MarketingService {
 
-    List<PlayerMarketing> findPlayersForMarketing();
-
-    List<PlayerMarketing> findMostSellingPlayers();
+    List<PlayerPrice> findPlayersByTransactionAnalyse(Long startTime, Long endTime, OrderingType orderingType, Integer limit);
 }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 @Document(collection = "transactions")
 public class Transaction {
 

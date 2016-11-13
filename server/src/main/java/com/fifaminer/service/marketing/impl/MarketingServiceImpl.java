@@ -1,18 +1,18 @@
 package com.fifaminer.service.marketing.impl;
 
-import com.fifaminer.entity.TransactionStatistics;
 import com.fifaminer.service.marketing.MarketingService;
-import com.fifaminer.service.marketing.model.PlayerMarketing;
+import com.fifaminer.service.marketing.strategy.PlayerSortingFactory;
+import com.fifaminer.service.marketing.type.OrderingType;
 import com.fifaminer.service.price.PriceService;
+import com.fifaminer.service.price.model.PlayerPrice;
 import com.fifaminer.service.transaction.TransactionAnalysingService;
+import com.fifaminer.service.transaction.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.fifaminer.service.marketing.strategy.PlayerSortingStrategy.*;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 
@@ -20,41 +20,41 @@ import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 public class MarketingServiceImpl implements MarketingService {
 
     private final TransactionAnalysingService transactionAnalysingService;
+    private final TransactionService transactionService;
+    private final PlayerSortingFactory sortingTypeFactory;
     private final PriceService priceService;
 
-    private static final int PLAYERS_LIMIT = 50;
+    private static final Integer MIN_TRANSACTIONS_COUNT_FOR_ANALYSE = 10;
 
     @Autowired
-    public MarketingServiceImpl(TransactionAnalysingService transactionAnalysingService, PriceService priceService) {
+    public MarketingServiceImpl(TransactionAnalysingService transactionAnalysingService,
+                                TransactionService transactionService,
+                                PlayerSortingFactory sortingTypeFactory,
+                                PriceService priceService) {
         this.transactionAnalysingService = transactionAnalysingService;
+        this.transactionService = transactionService;
+        this.sortingTypeFactory = sortingTypeFactory;
         this.priceService = priceService;
     }
 
     @Override
-    public List<PlayerMarketing> findPlayersForMarketing() {
-        return findPlayersBy(minRelists());
-    }
-
-    @Override
-    public List<PlayerMarketing> findMostSellingPlayers() {
-        return findPlayersBy(maxSells());
-    }
-
-    private List<PlayerMarketing> findPlayersBy(Comparator<TransactionStatistics> sortingStrategy) {
-        return transactionAnalysingService.findAll()
+    public List<PlayerPrice> findPlayersByTransactionAnalyse(Long startTime,
+                                                             Long endTime,
+                                                             OrderingType orderingType,
+                                                             Integer limit) {
+        return transactionService.findRecordsWhereTimestampBetween(startTime, endTime)
                 .stream()
-                .sorted(sortingStrategy)
-                .map(statistics -> new PlayerMarketing(
-                        statistics.getPlayerId(),
-                        priceService.getBuyPrice(statistics.getPlayerId()),
-                        priceService.getSellPrice(statistics.getPlayerId())))
-                .filter(hasValidMarketingData())
-                .limit(PLAYERS_LIMIT)
+                .filter(transaction -> transaction.getRecords().size() >= MIN_TRANSACTIONS_COUNT_FOR_ANALYSE)
+                .map(transactionAnalysingService::analyse)
+                .sorted(sortingTypeFactory.create(orderingType))
+                .map(statistics -> priceService.getPlayerPriceInfo(statistics.getPlayerId()))
+                .filter(hasAcceptableForMarketingPrices())
+                .limit(limit)
                 .collect(toList());
     }
 
-    private Predicate<PlayerMarketing> hasValidMarketingData() {
-        return playerMarketing -> (!playerMarketing.getBuyPrice().equals(INTEGER_ZERO) && !playerMarketing.getSellPrice().equals(INTEGER_ZERO))
-                && (playerMarketing.getBuyPrice() < playerMarketing.getSellPrice());
+    private Predicate<PlayerPrice> hasAcceptableForMarketingPrices() {
+        return playerPrice -> (!playerPrice.getBuyPrice().equals(INTEGER_ZERO) && !playerPrice.getSellPrice().equals(INTEGER_ZERO))
+                && (playerPrice.getBuyPrice() < playerPrice.getSellPrice());
     }
 }
