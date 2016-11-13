@@ -50,6 +50,13 @@ public class PriceResource {
     }
 
     @GET
+    @Path("{playerId}" + BID)
+    @Produces(APPLICATION_JSON)
+    public Integer getBidPrice(@PathParam("playerId") Long playerId) {
+        return priceService.getBidPrice(playerId);
+    }
+
+    @GET
     @Path("{playerId}" + SUMMARY)
     @Produces(APPLICATION_JSON)
     public PlayerPriceTO getPlayerPrice(@PathParam("playerId") Long playerId) {

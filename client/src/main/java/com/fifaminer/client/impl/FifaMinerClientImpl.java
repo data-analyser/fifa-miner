@@ -49,6 +49,13 @@ public class FifaMinerClientImpl implements FifaMinerClient {
     }
 
     @Override
+    public Integer getBidPrice(Long playerId) {
+        return client.resource(getUrl("/prices/" + playerId + "/bid"))
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .get(Integer.class);
+    }
+
+    @Override
     public Integer getProfit(Long playerId) {
         return client.resource(getUrl("/prices/" + playerId + "/profit"))
                 .type(MediaType.APPLICATION_JSON_TYPE)

@@ -8,6 +8,8 @@ public interface PriceService {
 
     Integer getSellPrice(Long playerId);
 
+    Integer getBidPrice(Long playerId);
+
     Integer getProfit(Long playerId);
 
     PlayerPrice getPlayerPriceInfo(Long playerId);

@@ -1,4 +1,4 @@
-package com.fifaminer.service.price.policy.impl;
+package com.fifaminer.service.price.policy;
 
 import com.fifaminer.service.price.BuyPriceStrategyService;
 import com.fifaminer.service.price.PriceBoundService;

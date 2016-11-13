@@ -6,6 +6,7 @@ public final class UrlPath {
     public static final String PRICES = "/prices";
     public static final String SELL = "/sell";
     public static final String BUY = "/buy";
+    public static final String BID = "/bid";
     public static final String PROFIT = "/profit";
     public static final String SUMMARY = "/summary";
     public static final String MARKETING = "/marketing";

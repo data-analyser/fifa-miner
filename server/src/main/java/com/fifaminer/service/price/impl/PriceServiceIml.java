@@ -3,11 +3,11 @@ package com.fifaminer.service.price.impl;
 import com.fifaminer.entity.PriceHistory;
 import com.fifaminer.service.price.*;
 import com.fifaminer.service.price.model.PlayerPrice;
-import com.fifaminer.service.price.policy.impl.BuyPriceDefinitionPolicy;
-import com.fifaminer.service.price.policy.impl.SellPriceDefinitionPolicy;
+import com.fifaminer.service.price.policy.BidPriceDefinitionPolicy;
+import com.fifaminer.service.price.policy.BuyPriceDefinitionPolicy;
+import com.fifaminer.service.price.policy.SellPriceDefinitionPolicy;
 import com.fifaminer.service.price.model.PriceStatistics;
 import com.fifaminer.service.setting.SettingsService;
-import com.fifaminer.service.setting.type.Setting;
 import com.fifaminer.timeseries.TimeSeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +33,7 @@ public class PriceServiceIml implements PriceService {
     private final TimeSeriesService timeSeriesService;
     private final BuyPriceDefinitionPolicy buyPolicy;
     private final SellPriceDefinitionPolicy sellPolicy;
+    private final BidPriceDefinitionPolicy bidPolicy;
     private final TaxService taxService;
     private final SettingsService settingsService;
 
@@ -42,6 +43,7 @@ public class PriceServiceIml implements PriceService {
                            TimeSeriesService timeSeriesService,
                            BuyPriceDefinitionPolicy buyPolicy,
                            SellPriceDefinitionPolicy sellPolicy,
+                           BidPriceDefinitionPolicy bidPolicy,
                            TaxService taxService,
                            SettingsService settingsService) {
         this.priceHistoryService = priceHistoryService;
@@ -49,6 +51,7 @@ public class PriceServiceIml implements PriceService {
         this.timeSeriesService = timeSeriesService;
         this.buyPolicy = buyPolicy;
         this.sellPolicy = sellPolicy;
+        this.bidPolicy = bidPolicy;
         this.taxService = taxService;
         this.settingsService = settingsService;
     }
@@ -87,6 +90,11 @@ public class PriceServiceIml implements PriceService {
                 extractProperty(priceStatistics, value -> value.getMin().doubleValue())
         );
         return sellPolicy.define(forecastedMin, forecastedMedian, priceStatistics);
+    }
+
+    @Override
+    public Integer getBidPrice(Long playerId) {
+        return bidPolicy.define(getSellPrice(playerId));
     }
 
     @Override
