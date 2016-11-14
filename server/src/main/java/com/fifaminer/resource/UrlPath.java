@@ -12,5 +12,5 @@ public final class UrlPath {
     public static final String MARKETING = "/marketing";
     public static final String OPERATIONS = "/operations";
     public static final String TRANSACTION_ANALYSE = "/transaction-analyse";
-    public static final String MOST_SELLING = "/most-selling";
+    public static final String LIMITS = "/limits";
 }

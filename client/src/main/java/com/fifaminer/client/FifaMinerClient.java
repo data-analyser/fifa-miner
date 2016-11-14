@@ -1,9 +1,6 @@
 package com.fifaminer.client;
 
-import com.fifaminer.client.dto.OrderingTypeTO;
-import com.fifaminer.client.dto.PlayerPriceTO;
-import com.fifaminer.client.dto.SettingConfigurationTO;
-import com.fifaminer.client.dto.SettingTO;
+import com.fifaminer.client.dto.*;
 
 import java.util.List;
 
@@ -26,5 +23,7 @@ public interface FifaMinerClient {
     PlayerPriceTO getPriceSummary(Long playerId);
 
     List<PlayerPriceTO> findPlayersByTransactionsAnalyse(Long startTime, Long endTime, OrderingTypeTO orderingTypeTO, Integer limit);
+
+    PriceLimits getPriceLimits(Long playerId, Platform platform);
 }
 
