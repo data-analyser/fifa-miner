@@ -103,12 +103,12 @@ public class PriceServiceIml implements PriceService {
 
     @Override
     public PlayerPrice getPlayerPriceInfo(Long playerId) {
-        return new PlayerPrice(
-                playerId,
-                getBuyPrice(playerId),
-                getSellPrice(playerId),
-                getBidPrice(playerId),
-                getProfit(playerId),
+        Integer buyPrice = getBuyPrice(playerId);
+        Integer sellPrice = getSellPrice(playerId);
+        Integer bidPrice = bidPolicy.define(sellPrice);
+        Integer profit = taxService.reduceTax(sellPrice) - buyPrice;
+
+        return new PlayerPrice(playerId, buyPrice, sellPrice, bidPrice, profit,
                 settingsService.getSetting(BUY_PRICE_STRATEGY),
                 settingsService.getSetting(SELL_PRICE_STRATEGY),
                 settingsService.getSetting(BID_PRICE_STRATEGY)

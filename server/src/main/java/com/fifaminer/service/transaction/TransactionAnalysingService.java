@@ -10,9 +10,9 @@ public interface TransactionAnalysingService {
 
     TransactionStatistics analyse(Transaction transaction);
 
-    void saveAll(List<TransactionStatistics> transactionStatistics);
+    TransactionStatistics analyseOnFly(Transaction transaction);
 
-    List<TransactionStatistics> findAll();
+    void saveAll(List<TransactionStatistics> transactionStatistics);
 
     Optional<TransactionStatistics> findByPlayerId(Long playerId);
 
