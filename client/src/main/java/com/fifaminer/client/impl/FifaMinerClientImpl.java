@@ -1,10 +1,7 @@
 package com.fifaminer.client.impl;
 
 import com.fifaminer.client.FifaMinerClient;
-import com.fifaminer.client.dto.OrderingTypeTO;
-import com.fifaminer.client.dto.PlayerPriceTO;
-import com.fifaminer.client.dto.SettingConfigurationTO;
-import com.fifaminer.client.dto.SettingTO;
+import com.fifaminer.client.dto.*;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
 
@@ -92,6 +89,13 @@ public class FifaMinerClientImpl implements FifaMinerClient {
         return client.resource(getUrl(buildMarketingRequestUrl(startTime, endTime, orderingTypeTO, limit)))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<PlayerPriceTO>>(){});
+    }
+
+    @Override
+    public PriceLimits getPriceLimits(Long playerId, Platform platform) {
+        return client.resource(getUrl("/prices/" + playerId + "/limits?platform=" + platform))
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .get(PriceLimits.class);
     }
 
     private String buildMarketingRequestUrl(Long startTime,

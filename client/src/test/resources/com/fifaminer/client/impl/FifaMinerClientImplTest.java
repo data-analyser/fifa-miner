@@ -1,6 +1,8 @@
 package com.fifaminer.client.impl;
 
 import com.fifaminer.client.FifaMinerClient;
+import com.fifaminer.client.dto.Platform;
+import com.fifaminer.client.dto.PriceLimits;
 import org.junit.Test;
 
 public class FifaMinerClientImplTest {
@@ -13,6 +15,6 @@ public class FifaMinerClientImplTest {
 
     @Test
     public void getBuyPrice() {
-        Integer price = fifaMinerClient.getBuyPrice(20800L);
+        PriceLimits price = fifaMinerClient.getPriceLimits(20800L, Platform.PC);
     }
 }
