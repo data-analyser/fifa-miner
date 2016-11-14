@@ -45,7 +45,7 @@ public class MarketingServiceImpl implements MarketingService {
         return transactionService.findRecordsWhereTimestampBetween(startTime, endTime)
                 .stream()
                 .filter(transaction -> transaction.getRecords().size() >= MIN_TRANSACTIONS_COUNT_FOR_ANALYSE)
-                .map(transactionAnalysingService::analyse)
+                .map(transactionAnalysingService::analyseOnFly)
                 .sorted(sortingTypeFactory.create(orderingType))
                 .map(statistics -> priceService.getPlayerPriceInfo(statistics.getPlayerId()))
                 .filter(hasAcceptableForMarketingPrices())

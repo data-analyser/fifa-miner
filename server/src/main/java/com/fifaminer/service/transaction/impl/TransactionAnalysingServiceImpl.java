@@ -21,6 +21,7 @@ import java.util.stream.IntStream;
 import static com.fifaminer.entity.pojo.TransactionType.*;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.Long.compare;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.math.NumberUtils.*;
@@ -43,17 +44,28 @@ public class TransactionAnalysingServiceImpl implements TransactionAnalysingServ
 
     @Override
     public TransactionStatistics analyse(Transaction transaction) {
-        return createStatistics(transaction);
+        TransactionStatisticsData transactionStatisticsData = analyseTransaction(transaction);
+
+        TransactionStatistics transactionStatistics = transactionAnalyseRepository.findOne(transaction.getPlayerId());
+
+        if (isNull(transactionStatistics)) {
+            return new TransactionStatistics(transaction.getPlayerId(), newArrayList(transactionStatisticsData));
+        }
+
+        transactionStatistics.getStatisticsData().add(transactionStatisticsData);
+        return transactionStatistics;
+    }
+
+    @Override
+    public TransactionStatistics analyseOnFly(Transaction transaction) {
+        return new TransactionStatistics(
+                transaction.getPlayerId(), singletonList(analyseTransaction(transaction))
+        );
     }
 
     @Override
     public void saveAll(List<TransactionStatistics> transactionStatistics) {
         transactionAnalyseRepository.save(transactionStatistics);
-    }
-
-    @Override
-    public List<TransactionStatistics> findAll() {
-        return transactionAnalyseRepository.findAll();
     }
 
     @Override
@@ -66,13 +78,13 @@ public class TransactionAnalysingServiceImpl implements TransactionAnalysingServ
         transactionAnalyseRepository.save(transactionStatistics);
     }
 
-    private TransactionStatistics createStatistics(Transaction transaction) {
+    private TransactionStatisticsData analyseTransaction(Transaction transaction) {
         List<TransactionRecord> records = transaction.getRecords();
 
         Long relists = getTransactionCountByType(records, RELIST);
         Long sells = getTransactionCountByType(records, SELL_CARD);
 
-        TransactionStatisticsData transactionStatisticsData = new TransactionStatisticsData(
+        return new TransactionStatisticsData(
                 clockService.now(),
                 getTransactionCountByType(records, BOUGHT_CARD, BOUGHT_BY_ROBOT),
                 getTransactionCountByType(records, PLACED_TO_MARKET),
@@ -83,15 +95,6 @@ public class TransactionAnalysingServiceImpl implements TransactionAnalysingServ
                 getMedianSellTime(records),
                 getMedianSellPrice(records)
         );
-
-        TransactionStatistics transactionStatistics = transactionAnalyseRepository.findOne(transaction.getPlayerId());
-
-        if (isNull(transactionStatistics)) {
-            return new TransactionStatistics(transaction.getPlayerId(), newArrayList(transactionStatisticsData));
-        }
-
-        transactionStatistics.getStatisticsData().add(transactionStatisticsData);
-        return transactionStatistics;
     }
 
     private Long getTransactionCountByType(List<TransactionRecord> records,
