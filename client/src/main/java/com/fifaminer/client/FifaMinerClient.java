@@ -8,11 +8,11 @@ public interface FifaMinerClient {
 
     void runForceTransactionAnalyse();
 
-    Integer getBuyPrice(Long playerId);
+    Integer getMaxBuyPrice(Long playerId);
 
-    Integer getSellPrice(Long playerId);
+    Integer getSellStartPrice(Long playerId);
 
-    Integer getBidPrice(Long playerId);
+    Integer getSellBuyNowPrice(Long playerId);
 
     Integer getProfit(Long playerId);
 
@@ -20,7 +20,7 @@ public interface FifaMinerClient {
 
     void updateSetting(SettingConfigurationTO settingConfigurationTO);
 
-    PlayerPriceTO getPriceSummary(Long playerId);
+    PlayerPriceTO getPricesSummary(Long playerId);
 
     List<PlayerPriceTO> findPlayersByTransactionsAnalyse(Long startTime, Long endTime, OrderingTypeTO orderingTypeTO, Integer limit);
 

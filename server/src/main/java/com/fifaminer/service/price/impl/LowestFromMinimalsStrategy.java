@@ -1,14 +1,14 @@
 package com.fifaminer.service.price.impl;
 
-import com.fifaminer.service.price.BuyPriceStrategy;
-import com.fifaminer.service.price.model.BuyPriceDefinitionContext;
+import com.fifaminer.service.price.MaxBuyPriceStrategy;
+import com.fifaminer.service.price.model.MaxBuyPriceDefinitionContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LowestFromMinimalsStrategy implements BuyPriceStrategy {
+public class LowestFromMinimalsStrategy implements MaxBuyPriceStrategy {
 
     @Override
-    public Integer calculate(BuyPriceDefinitionContext context) {
+    public Integer calculate(MaxBuyPriceDefinitionContext context) {
         Integer currentMin = context.getCurrentMin();
         Integer forecastedMin = context.getForecastedMin();
         return forecastedMin < currentMin ? forecastedMin : currentMin;

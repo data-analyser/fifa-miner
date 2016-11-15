@@ -10,13 +10,13 @@ public class PlayerPriceConverter {
     public PlayerPriceTO toTO(PlayerPrice playerPrice) {
         return new PlayerPriceTO(
                 playerPrice.getPlayerId(),
-                playerPrice.getBuyPrice(),
-                playerPrice.getSellPrice(),
-                playerPrice.getBidPrice(),
+                playerPrice.getMaxBuyPrice(),
+                playerPrice.getSellStartPrice(),
+                playerPrice.getSellBuyNowPrice(),
                 playerPrice.getProfit(),
-                playerPrice.getBuyPriceStrategy(),
-                playerPrice.getSellPriceStrategy(),
-                playerPrice.getBidPriceStrategy()
+                playerPrice.getMaxBuyPriceStrategy(),
+                playerPrice.getSellStartPriceStrategy(),
+                playerPrice.getSellBuyNowPriceStrategy()
         );
     }
 }

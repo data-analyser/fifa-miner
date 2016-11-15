@@ -32,17 +32,17 @@ public class PriceResource {
     }
 
     @GET
-    @Path("{playerId}" + BUY)
+    @Path("{playerId}" + MAX_BUY)
     @Produces(APPLICATION_JSON)
-    public Integer getBuyPrice(@PathParam("playerId") Long playerId) {
-        return priceService.getBuyPrice(playerId);
+    public Integer getMaxBuyPrice(@PathParam("playerId") Long playerId) {
+        return priceService.getMaxBuyPrice(playerId);
     }
 
     @GET
-    @Path("{playerId}" + SELL)
+    @Path("{playerId}" + SELL_START)
     @Produces(APPLICATION_JSON)
-    public Integer getSellPrice(@PathParam("playerId") Long playerId) {
-        return priceService.getSellPrice(playerId);
+    public Integer getSellStartPrice(@PathParam("playerId") Long playerId) {
+        return priceService.getSellStartPrice(playerId);
     }
 
     @GET
@@ -53,17 +53,17 @@ public class PriceResource {
     }
 
     @GET
-    @Path("{playerId}" + BID)
+    @Path("{playerId}" + SELL_BUY_NOW)
     @Produces(APPLICATION_JSON)
-    public Integer getBidPrice(@PathParam("playerId") Long playerId) {
-        return priceService.getBidPrice(playerId);
+    public Integer getSellBuyNowPrice(@PathParam("playerId") Long playerId) {
+        return priceService.getSellBuyNowPrice(playerId);
     }
 
     @GET
     @Path("{playerId}" + SUMMARY)
     @Produces(APPLICATION_JSON)
-    public PlayerPriceTO getPlayerPrice(@PathParam("playerId") Long playerId) {
-        return converter.toTO(priceService.getPlayerPriceInfo(playerId));
+    public PlayerPriceTO getPricesSummary(@PathParam("playerId") Long playerId) {
+        return converter.toTO(priceService.getPricesSummary(playerId));
     }
 
     @GET
