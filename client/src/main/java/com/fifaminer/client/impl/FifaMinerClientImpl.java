@@ -84,13 +84,13 @@ public class FifaMinerClientImpl implements FifaMinerClient {
     }
 
     @Override
-    public List<PlayerPriceTO> findPlayersByTransactionsAnalyse(Long startTime,
-                                                                Long endTime,
-                                                                OrderingTypeTO orderingTypeTO,
-                                                                Integer limit) {
+    public List<Long> findPlayersByTransactionsAnalyse(Long startTime,
+                                                       Long endTime,
+                                                       OrderingTypeTO orderingTypeTO,
+                                                       Integer limit) {
         return client.resource(getUrl(buildMarketingRequestUrl(startTime, endTime, orderingTypeTO, limit)))
                 .type(MediaType.APPLICATION_JSON_TYPE)
-                .get(new GenericType<List<PlayerPriceTO>>(){});
+                .get(new GenericType<List<Long>>() {});
     }
 
     @Override
