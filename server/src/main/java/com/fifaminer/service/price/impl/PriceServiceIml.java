@@ -3,9 +3,9 @@ package com.fifaminer.service.price.impl;
 import com.fifaminer.entity.PriceHistory;
 import com.fifaminer.service.price.*;
 import com.fifaminer.service.price.model.PlayerPrice;
-import com.fifaminer.service.price.policy.BidPriceDefinitionPolicy;
-import com.fifaminer.service.price.policy.BuyPriceDefinitionPolicy;
-import com.fifaminer.service.price.policy.SellPriceDefinitionPolicy;
+import com.fifaminer.service.price.policy.SellStartPriceDefinitionPolicy;
+import com.fifaminer.service.price.policy.MaxBuyPriceDefinitionPolicy;
+import com.fifaminer.service.price.policy.SellBuyNowPriceDefinitionPolicy;
 import com.fifaminer.service.price.model.PriceStatistics;
 import com.fifaminer.service.setting.SettingsService;
 import com.fifaminer.timeseries.TimeSeriesService;
@@ -30,9 +30,9 @@ public class PriceServiceIml implements PriceService {
     private final PriceHistoryService priceHistoryService;
     private final PriceStatisticsService priceStatisticsService;
     private final TimeSeriesService timeSeriesService;
-    private final BuyPriceDefinitionPolicy buyPolicy;
-    private final SellPriceDefinitionPolicy sellPolicy;
-    private final BidPriceDefinitionPolicy bidPolicy;
+    private final MaxBuyPriceDefinitionPolicy maxBuyPolicy;
+    private final SellStartPriceDefinitionPolicy sellStartPolicy;
+    private final SellBuyNowPriceDefinitionPolicy sellBuyNowPolicy;
     private final TaxService taxService;
     private final SettingsService settingsService;
 
@@ -40,23 +40,23 @@ public class PriceServiceIml implements PriceService {
     public PriceServiceIml(PriceHistoryService priceHistoryService,
                            PriceStatisticsService priceStatisticsService,
                            TimeSeriesService timeSeriesService,
-                           BuyPriceDefinitionPolicy buyPolicy,
-                           SellPriceDefinitionPolicy sellPolicy,
-                           BidPriceDefinitionPolicy bidPolicy,
+                           MaxBuyPriceDefinitionPolicy maxBuyPolicy,
+                           SellStartPriceDefinitionPolicy sellStartPolicy,
+                           SellBuyNowPriceDefinitionPolicy sellBuyNowPolicy,
                            TaxService taxService,
                            SettingsService settingsService) {
         this.priceHistoryService = priceHistoryService;
         this.priceStatisticsService = priceStatisticsService;
         this.timeSeriesService = timeSeriesService;
-        this.buyPolicy = buyPolicy;
-        this.sellPolicy = sellPolicy;
-        this.bidPolicy = bidPolicy;
+        this.maxBuyPolicy = maxBuyPolicy;
+        this.sellStartPolicy = sellStartPolicy;
+        this.sellBuyNowPolicy = sellBuyNowPolicy;
         this.taxService = taxService;
         this.settingsService = settingsService;
     }
 
     @Override
-    public Integer getBuyPrice(Long playerId) {
+    public Integer getMaxBuyPrice(Long playerId) {
         PriceHistory priceHistory = priceHistoryService.findByPlayerId(playerId);
 
         if (isNull(priceHistory) || isEmpty(priceHistory.getHistory())) return INTEGER_ZERO;
@@ -68,11 +68,16 @@ public class PriceServiceIml implements PriceService {
         Double forecastedMin = timeSeriesService.forecast(
                 extractProperty(priceStatistics, value -> value.getMin().doubleValue())
         );
-        return buyPolicy.define(priceStatistics, forecastedMin);
+        return maxBuyPolicy.define(priceStatistics, forecastedMin);
     }
 
     @Override
-    public Integer getSellPrice(Long playerId) {
+    public Integer getSellStartPrice(Long playerId) {
+        return sellStartPolicy.define(getSellBuyNowPrice(playerId));
+    }
+
+    @Override
+    public Integer getSellBuyNowPrice(Long playerId) {
         PriceHistory priceHistory = priceHistoryService.findByPlayerId(playerId);
 
         if (isNull(priceHistory) || isEmpty(priceHistory.getHistory())) return INTEGER_ZERO;
@@ -88,30 +93,26 @@ public class PriceServiceIml implements PriceService {
         Double forecastedMin = timeSeriesService.forecast(
                 extractProperty(priceStatistics, value -> value.getMin().doubleValue())
         );
-        return sellPolicy.define(forecastedMin, forecastedMedian, priceStatistics);
-    }
-
-    @Override
-    public Integer getBidPrice(Long playerId) {
-        return bidPolicy.define(getSellPrice(playerId));
+        return sellBuyNowPolicy.define(forecastedMin, forecastedMedian, priceStatistics);
     }
 
     @Override
     public Integer getProfit(Long playerId) {
-        return taxService.reduceTax(getSellPrice(playerId)) - getBuyPrice(playerId);
+        return taxService.reduceTax(getSellBuyNowPrice(playerId)) - getMaxBuyPrice(playerId);
     }
 
     @Override
-    public PlayerPrice getPlayerPriceInfo(Long playerId) {
-        Integer buyPrice = getBuyPrice(playerId);
-        Integer sellPrice = getSellPrice(playerId);
-        Integer bidPrice = bidPolicy.define(sellPrice);
-        Integer profit = taxService.reduceTax(sellPrice) - buyPrice;
+    public PlayerPrice getPricesSummary(Long playerId) {
+        Integer maxBuyNowPrice = getMaxBuyPrice(playerId);
+        Integer sellBuyNowPrice = getSellBuyNowPrice(playerId);
+        Integer sellStartPrice = sellStartPolicy.define(sellBuyNowPrice);
+        Integer profit = taxService.reduceTax(sellBuyNowPrice) - maxBuyNowPrice;
 
-        return new PlayerPrice(playerId, buyPrice, sellPrice, bidPrice, profit,
-                settingsService.getSetting(BUY_PRICE_STRATEGY),
-                settingsService.getSetting(SELL_PRICE_STRATEGY),
-                settingsService.getSetting(BID_PRICE_STRATEGY)
+        return new PlayerPrice(
+                playerId, maxBuyNowPrice, sellStartPrice, sellBuyNowPrice, profit,
+                settingsService.getSetting(MAX_BUY_PRICE_STRATEGY),
+                settingsService.getSetting(SELL_START_PRICE_STRATEGY),
+                settingsService.getSetting(SELL_BUY_NOW_PRICE_STRATEGY)
         );
     }
 

@@ -47,14 +47,14 @@ public class MarketingServiceImpl implements MarketingService {
                 .filter(transaction -> transaction.getRecords().size() >= MIN_TRANSACTIONS_COUNT_FOR_ANALYSE)
                 .map(transactionAnalysingService::analyseOnFly)
                 .sorted(sortingTypeFactory.create(orderingType))
-                .map(statistics -> priceService.getPlayerPriceInfo(statistics.getPlayerId()))
+                .map(statistics -> priceService.getPricesSummary(statistics.getPlayerId()))
                 .filter(hasAcceptableForMarketingPrices())
                 .limit(limit)
                 .collect(toList());
     }
 
     private Predicate<PlayerPrice> hasAcceptableForMarketingPrices() {
-        return playerPrice -> (!playerPrice.getBuyPrice().equals(INTEGER_ZERO) && !playerPrice.getSellPrice().equals(INTEGER_ZERO))
-                && (playerPrice.getBuyPrice() < playerPrice.getSellPrice());
+        return playerPrice -> (!playerPrice.getMaxBuyPrice().equals(INTEGER_ZERO) && !playerPrice.getSellBuyNowPrice().equals(INTEGER_ZERO))
+                && (playerPrice.getMaxBuyPrice() < playerPrice.getSellBuyNowPrice());
     }
 }

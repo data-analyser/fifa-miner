@@ -4,13 +4,13 @@ import com.fifaminer.service.price.model.PlayerPrice;
 
 public interface PriceService {
 
-    Integer getBuyPrice(Long playerId);
+    Integer getMaxBuyPrice(Long playerId);
 
-    Integer getSellPrice(Long playerId);
+    Integer getSellStartPrice(Long playerId);
 
-    Integer getBidPrice(Long playerId);
+    Integer getSellBuyNowPrice(Long playerId);
 
     Integer getProfit(Long playerId);
 
-    PlayerPrice getPlayerPriceInfo(Long playerId);
+    PlayerPrice getPricesSummary(Long playerId);
 }

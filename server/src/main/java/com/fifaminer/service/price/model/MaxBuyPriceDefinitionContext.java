@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public final class BuyPriceDefinitionContext {
+public final class MaxBuyPriceDefinitionContext {
 
     private final Integer forecastedMin;
     private final Integer currentMin;

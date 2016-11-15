@@ -33,22 +33,22 @@ public class FifaMinerClientImpl implements FifaMinerClient {
     }
 
     @Override
-    public Integer getBuyPrice(Long playerId) {
-        return client.resource(getUrl("/prices/" + playerId + "/buy"))
+    public Integer getMaxBuyPrice(Long playerId) {
+        return client.resource(getUrl("/prices/" + playerId + "/max-buy"))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(Integer.class);
     }
 
     @Override
-    public Integer getSellPrice(Long playerId) {
-        return client.resource(getUrl("/prices/" + playerId + "/sell"))
+    public Integer getSellStartPrice(Long playerId) {
+        return client.resource(getUrl("/prices/" + playerId + "/sell-start"))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(Integer.class);
     }
 
     @Override
-    public Integer getBidPrice(Long playerId) {
-        return client.resource(getUrl("/prices/" + playerId + "/bid"))
+    public Integer getSellBuyNowPrice(Long playerId) {
+        return client.resource(getUrl("/prices/" + playerId + "/sell-buy-now"))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(Integer.class);
     }
@@ -75,7 +75,7 @@ public class FifaMinerClientImpl implements FifaMinerClient {
     }
 
     @Override
-    public PlayerPriceTO getPriceSummary(Long playerId) {
+    public PlayerPriceTO getPricesSummary(Long playerId) {
         return client.resource(getUrl("/prices/" + playerId + "/summary"))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(PlayerPriceTO.class);

@@ -8,11 +8,11 @@ import lombok.Data;
 public class PlayerPrice {
 
     private final Long playerId;
-    private final Integer buyPrice;
-    private final Integer sellPrice;
-    private final Integer bidPrice;
+    private final Integer maxBuyPrice;
+    private final Integer sellStartPrice;
+    private final Integer sellBuyNowPrice;
     private final Integer profit;
-    private final String buyPriceStrategy;
-    private final String sellPriceStrategy;
-    private final String bidPriceStrategy;
+    private final String maxBuyPriceStrategy;
+    private final String sellStartPriceStrategy;
+    private final String sellBuyNowPriceStrategy;
 }
