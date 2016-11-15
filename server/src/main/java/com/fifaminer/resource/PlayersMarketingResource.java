@@ -1,5 +1,6 @@
 package com.fifaminer.resource;
 
+import com.fifaminer.client.dto.Duration;
 import com.fifaminer.client.dto.OrderingTypeTO;
 import com.fifaminer.service.marketing.MarketingService;
 import com.fifaminer.service.marketing.type.OrderingType;
@@ -27,13 +28,25 @@ public class PlayersMarketingResource {
     }
 
     @GET
+    @Path("/range")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Long> findPlayers(@QueryParam("startTime") Long startTime,
-                                  @QueryParam("endTime") Long endTime,
-                                  @QueryParam("orderingType") OrderingTypeTO orderingTypeTO,
-                                  @QueryParam("limit") Integer limit) {
+    public List<Long> findPlayersByTimeRange(@QueryParam("startTime") Long startTime,
+                                             @QueryParam("endTime") Long endTime,
+                                             @QueryParam("orderingType") OrderingTypeTO orderingTypeTO,
+                                             @QueryParam("limit") Integer limit) {
         return marketingService.findPlayersByTransactionAnalyse(
                 startTime, endTime, OrderingType.valueOf(orderingTypeTO.name()), limit
+        );
+    }
+
+    @GET
+    @Path("/duration")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Long> findPlayersByDuration(@QueryParam("duration") Duration duration,
+                                            @QueryParam("orderingType") OrderingTypeTO orderingTypeTO,
+                                            @QueryParam("limit") Integer limit) {
+        return marketingService.findPlayersByTransactionAnalyse(
+                duration, OrderingType.valueOf(orderingTypeTO.name()), limit
         );
     }
 }

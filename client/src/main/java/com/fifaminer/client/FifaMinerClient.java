@@ -24,6 +24,8 @@ public interface FifaMinerClient {
 
     List<Long> findPlayersByTransactionsAnalyse(Long startTime, Long endTime, OrderingTypeTO orderingTypeTO, Integer limit);
 
+    List<Long> findPlayersByTransactionsAnalyse(Duration duration, OrderingTypeTO orderingTypeTO, Integer limit);
+
     PriceLimits getPriceLimits(Long playerId, Platform platform);
 
     boolean isHealthy();
