@@ -10,6 +10,8 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URL;
 import java.util.List;
 
+import static com.fifaminer.client.util.Strings.isNullOrEmpty;
+
 public class FifaMinerClientImpl implements FifaMinerClient {
 
     private final Client client;
@@ -18,8 +20,8 @@ public class FifaMinerClientImpl implements FifaMinerClient {
     private final Integer port;
 
     FifaMinerClientImpl(String protocol,
-                               String serverUrl,
-                               Integer port) {
+                        String serverUrl,
+                        Integer port) {
         this.client = Client.create();
         this.protocol = protocol;
         this.serverUrl = serverUrl;
@@ -96,6 +98,18 @@ public class FifaMinerClientImpl implements FifaMinerClient {
         return client.resource(getUrl("/prices/" + playerId + "/limits?platform=" + platform))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(PriceLimits.class);
+    }
+
+    @Override
+    public boolean isHealthy() {
+        try {
+            String healthyPhrase = client.resource(getUrl("/health-check"))
+                    .type(MediaType.TEXT_PLAIN_TYPE)
+                    .get(String.class);
+            return !isNullOrEmpty(healthyPhrase);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private String buildMarketingRequestUrl(Long startTime,
