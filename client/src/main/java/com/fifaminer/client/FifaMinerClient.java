@@ -29,5 +29,7 @@ public interface FifaMinerClient {
     PriceLimits getPriceLimits(Long playerId, Platform platform);
 
     boolean isHealthy();
+
+    boolean isPriceDistributionActual(Long playerId);
 }
 

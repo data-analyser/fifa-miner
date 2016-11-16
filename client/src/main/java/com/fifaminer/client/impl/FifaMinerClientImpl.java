@@ -119,6 +119,13 @@ public class FifaMinerClientImpl implements FifaMinerClient {
         }
     }
 
+    @Override
+    public boolean isPriceDistributionActual(Long playerId) {
+        return client.resource(getUrl("/prices/" + playerId + "/is-actual"))
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .get(Boolean.class);
+    }
+
     private String buildDurationMarketingRequestUrl(Duration duration,
                                                     OrderingTypeTO orderingTypeTO,
                                                     Integer limit) {

@@ -3,6 +3,7 @@ package com.fifaminer.service.price.impl;
 import com.fifaminer.entity.PriceHistory;
 import com.fifaminer.service.price.*;
 import com.fifaminer.service.price.model.PlayerPrice;
+import com.fifaminer.service.price.policy.PriceActualityPolicy;
 import com.fifaminer.service.price.policy.SellStartPriceDefinitionPolicy;
 import com.fifaminer.service.price.policy.MaxBuyPriceDefinitionPolicy;
 import com.fifaminer.service.price.policy.SellBuyNowPriceDefinitionPolicy;
@@ -12,8 +13,10 @@ import com.fifaminer.timeseries.TimeSeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -22,7 +25,8 @@ import static java.lang.Long.compare;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.collections4.MapUtils.isEmpty;
-import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
+import static org.apache.commons.collections4.MapUtils.isNotEmpty;
+import static org.apache.commons.lang3.math.NumberUtils.*;
 
 @Service
 public class PriceServiceIml implements PriceService {
@@ -33,6 +37,7 @@ public class PriceServiceIml implements PriceService {
     private final MaxBuyPriceDefinitionPolicy maxBuyPolicy;
     private final SellStartPriceDefinitionPolicy sellStartPolicy;
     private final SellBuyNowPriceDefinitionPolicy sellBuyNowPolicy;
+    private final PriceActualityPolicy priceActualityPolicy;
     private final TaxService taxService;
     private final SettingsService settingsService;
 
@@ -43,6 +48,7 @@ public class PriceServiceIml implements PriceService {
                            MaxBuyPriceDefinitionPolicy maxBuyPolicy,
                            SellStartPriceDefinitionPolicy sellStartPolicy,
                            SellBuyNowPriceDefinitionPolicy sellBuyNowPolicy,
+                           PriceActualityPolicy priceActualityPolicy,
                            TaxService taxService,
                            SettingsService settingsService) {
         this.priceHistoryService = priceHistoryService;
@@ -51,6 +57,7 @@ public class PriceServiceIml implements PriceService {
         this.maxBuyPolicy = maxBuyPolicy;
         this.sellStartPolicy = sellStartPolicy;
         this.sellBuyNowPolicy = sellBuyNowPolicy;
+        this.priceActualityPolicy = priceActualityPolicy;
         this.taxService = taxService;
         this.settingsService = settingsService;
     }
@@ -116,6 +123,25 @@ public class PriceServiceIml implements PriceService {
         );
     }
 
+    @Override
+    public boolean isPriceDistributionActual(Long playerId) {
+        return priceActualityPolicy.isActualPrices(getLastDistributionTime(playerId));
+    }
+
+    private Long getLastDistributionTime(Long playerId) {
+        PriceHistory priceHistory = priceHistoryService.findByPlayerId(playerId);
+
+        if (isNull(priceHistory) || isEmpty(priceHistory.getHistory())) return LONG_ZERO;
+
+        return priceHistory.getHistory().entrySet()
+                .stream()
+                .filter(entry -> isNotEmpty(entry.getValue()))
+                .map(Entry::getKey)
+                .sorted(byTimeStamp().reversed())
+                .findFirst()
+                .orElse(LONG_ZERO);
+    }
+
     private List<Double> extractProperty(List<PriceStatistics> priceStatistics,
                                          Function<PriceStatistics, Double> extractFunction) {
         return priceStatistics.stream()
@@ -140,5 +166,9 @@ public class PriceServiceIml implements PriceService {
         return prices.keySet()
                 .stream()
                 .collect(toList());
+    }
+
+    private Comparator<Long> byTimeStamp() {
+        return Long::compare;
     }
 }
