@@ -20,7 +20,7 @@ public class TimeRangeServiceImpl implements TimeRangeService {
     private Map<Duration, Function<Duration, TimeRange>> durationFunctions;
 
     @PostConstruct
-    public void initDurationFunctions() {
+    private void initDurationFunctions() {
         durationFunctions = new Builder<Duration, Function<Duration, TimeRange>>()
                 .put(TODAY, todayFunction())
                 .put(YESTERDAY, yesterdayFunction())
