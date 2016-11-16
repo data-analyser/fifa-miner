@@ -13,4 +13,6 @@ public interface PriceService {
     Integer getProfit(Long playerId);
 
     PlayerPrice getPricesSummary(Long playerId);
+
+    boolean isPriceDistributionActual(Long playerId);
 }

@@ -29,5 +29,6 @@ public class FifaMinerClientImplTest {
                 1477574603286L, 1479064949173L, OrderingTypeTO.MAX_SELLS, 5
         );
         fifaMinerClient.findPlayersByTransactionsAnalyse(Duration.TODAY, OrderingTypeTO.MAX_SELLS, 5);
+        fifaMinerClient.isPriceDistributionActual(20800L);
     }
 }

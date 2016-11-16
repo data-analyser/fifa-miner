@@ -73,4 +73,11 @@ public class PriceResource {
                                       @QueryParam("platform") Platform platform) {
         return priceLimitService.getPriceLimits(playerId, platform);
     }
+
+    @GET
+    @Path("{playerId}" + IS_ACTUAL)
+    @Produces(APPLICATION_JSON)
+    public Boolean isPriceDistributionActual(@PathParam("playerId") Long playerId) {
+        return priceService.isPriceDistributionActual(playerId);
+    }
 }
