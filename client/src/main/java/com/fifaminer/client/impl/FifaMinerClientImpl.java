@@ -111,7 +111,7 @@ public class FifaMinerClientImpl implements FifaMinerClient {
     public boolean isHealthy() {
         try {
             String healthyPhrase = client.resource(getUrl("/health-check"))
-                    .type(MediaType.TEXT_PLAIN_TYPE)
+                    .type(MediaType.APPLICATION_JSON_TYPE)
                     .get(String.class);
             return !isNullOrEmpty(healthyPhrase);
         } catch (Exception e) {
