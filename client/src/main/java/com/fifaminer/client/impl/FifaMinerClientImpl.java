@@ -1,9 +1,12 @@
 package com.fifaminer.client.impl;
 
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.fifaminer.client.FifaMinerClient;
 import com.fifaminer.client.dto.*;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
@@ -22,7 +25,7 @@ public class FifaMinerClientImpl implements FifaMinerClient {
     FifaMinerClientImpl(String protocol,
                         String serverUrl,
                         Integer port) {
-        this.client = Client.create();
+        this.client = Client.create(getDefaultClientConfig());
         this.protocol = protocol;
         this.serverUrl = serverUrl;
         this.port = port;
@@ -156,5 +159,11 @@ public class FifaMinerClientImpl implements FifaMinerClient {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private ClientConfig getDefaultClientConfig() {
+        ClientConfig clientConfig = new DefaultClientConfig();
+        clientConfig.getClasses().add(JacksonJsonProvider.class);
+        return clientConfig;
     }
 }
