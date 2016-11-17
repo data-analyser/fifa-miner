@@ -10,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.math.NumberUtils.*;
+import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 
 @Service
 public class PriceBoundServiceImpl implements PriceBoundService {
@@ -24,6 +25,8 @@ public class PriceBoundServiceImpl implements PriceBoundService {
     private final NumbersService numbersService;
 
     private Map<Range<Integer>, List<Integer>> bounds;
+
+    private List<Integer> allBounds;
 
     private static final int MIN_BID = 150;
     private static final int MAX_BID = 100_000;
@@ -41,12 +44,35 @@ public class PriceBoundServiceImpl implements PriceBoundService {
                 .put(Range.openClosed(10_000, 50_000), generateBounds(10_000, 50_000, 250))
                 .put(Range.openClosed(50_000, 100_000), generateBounds(50_000, 100_000, 500))
                 .build();
+        allBounds = concatBounds();
+    }
+
+    private List<Integer> concatBounds() {
+        return bounds.values().stream()
+                .flatMap(Collection::stream)
+                .collect(toList());
     }
 
     @Override
     public Integer arrangeToBound(Integer amount, BoundSelection boundSelection) {
         Preconditions.checkArgument(amount <= MAX_BID, "Cannot configure bound");
         return amount < MIN_BID ? MIN_BID : applyBounds(amount, boundSelection);
+    }
+
+    @Override
+    public Integer arrangeToSteps(Integer amount, Integer steps, BoundSelection boundSelection) {
+        return amount < MIN_BID ? MIN_BID : applySteps(amount, steps, boundSelection);
+    }
+
+    private Integer applySteps(Integer amount, Integer steps, BoundSelection boundSelection) {
+        for (Entry<Range<Integer>, List<Integer>> bound : bounds.entrySet()) {
+            if (bound.getKey().contains(amount)) {
+                return numbersService.findBySteps(
+                        amount, allBounds, steps, boundSelection
+                );
+            }
+        }
+        return amount;
     }
 
     private List<Integer> generateBounds(Integer lower, Integer upper, Integer step) {

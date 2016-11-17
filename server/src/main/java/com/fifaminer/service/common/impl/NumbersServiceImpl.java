@@ -16,6 +16,24 @@ public class NumbersServiceImpl implements NumbersService {
         return orderedValues.contains(value) ? value : getClosestValue(value, orderedValues, boundSelection);
     }
 
+    @Override
+    public Integer findBySteps(Integer value, List<Integer> allBounds, Integer steps, BoundSelection boundSelection) {
+        Integer closestValue = findClosest(value, allBounds, boundSelection);
+        return findValueBySteps(closestValue, allBounds, steps, boundSelection);
+    }
+
+    private Integer findValueBySteps(Integer closestValue,
+                                     List<Integer> allBounds,
+                                     Integer steps,
+                                     BoundSelection boundSelection) {
+        Integer index = allBounds.indexOf(closestValue);
+        return allBounds.get(getIndexByStep(index, steps, boundSelection));
+    }
+
+    private Integer getIndexByStep(Integer index, Integer steps, BoundSelection boundSelection) {
+        return boundSelection.equals(HIGHER) ? index + steps : index - steps;
+    }
+
     private Integer getClosestValue(Integer value, List<Integer> orderedValues,
                                     BoundSelection boundSelection) {
         for (int i = 0; i < orderedValues.size(); i++) {

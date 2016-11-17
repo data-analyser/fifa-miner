@@ -16,7 +16,7 @@ public class SellStartPriceStrategyServiceImpl implements SellStartPriceStrategy
     private final SettingsService settingsService;
     private final Map<String, SellStartPriceStrategy> sellStartPriceStrategies;
 
-    private static final String DEFAULT_STRATEGY = "theSameAsSellBuyNowPriceStrategy";
+    private static final String DEFAULT_STRATEGY = "lowerFewBidsFromBuyNowPriceStrategy";
 
     @Autowired
     public SellStartPriceStrategyServiceImpl(SettingsService settingsService,
