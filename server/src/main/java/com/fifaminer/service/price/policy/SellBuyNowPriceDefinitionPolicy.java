@@ -36,6 +36,8 @@ public class SellBuyNowPriceDefinitionPolicy {
         Integer sellBuyNowPriceByStrategy = sellBuyNowPriceStrategyService.findActiveSellBuyNowStrategy()
                 .calculate(sellBuyNowPriceDefinitionContext);
 
+        // TODO: 17.11.2016  Difference between forecasted median and median less than one bid
+
         return priceBoundService.arrangeToBound(
                 taxService.addTax(sellBuyNowPriceByStrategy), BoundSelection.HIGHER
         );
