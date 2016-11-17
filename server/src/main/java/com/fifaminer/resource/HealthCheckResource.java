@@ -14,7 +14,7 @@ import static com.fifaminer.resource.UrlPath.HEALTH_CHECK;
 public class HealthCheckResource {
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String healthCheck() {
         return "I am working";
     }
