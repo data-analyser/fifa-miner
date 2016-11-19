@@ -2,9 +2,9 @@ package com.fifaminer.service.price;
 
 import com.fifaminer.service.price.model.PriceStatistics;
 
-import java.util.List;
+import java.util.Map;
 
 public interface PriceStatisticsService {
 
-    PriceStatistics calculatePriceStatistics(Long timestamp, List<Integer> prices);
+    PriceStatistics calculatePriceStatistics(Long timestamp, Map<Integer, Integer> priceDistribution);
 }
