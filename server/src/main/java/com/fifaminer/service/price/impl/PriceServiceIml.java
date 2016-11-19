@@ -159,7 +159,7 @@ public class PriceServiceIml implements PriceService {
     private List<PriceStatistics> calculateStatistics(Map<Long, Map<Integer, Integer>> history) {
         return history.entrySet()
                 .stream()
-                .map(entry -> priceStatisticsService.calculatePriceStatistics(entry.getKey(), getPrices(entry.getValue())))
+                .map(entry -> priceStatisticsService.calculatePriceStatistics(entry.getKey(), entry.getValue()))
                 .sorted((current, next) -> compare(current.getTimestamp(), next.getTimestamp()))
                 .filter(withoutZeroStats())
                 .collect(toList());
@@ -167,12 +167,6 @@ public class PriceServiceIml implements PriceService {
 
     private Predicate<PriceStatistics> withoutZeroStats() {
         return value -> !value.getMin().equals(INTEGER_ZERO) && !value.getMedian().equals(INTEGER_ZERO);
-    }
-
-    private List<Integer> getPrices(Map<Integer, Integer> prices) {
-        return prices.keySet()
-                .stream()
-                .collect(toList());
     }
 
     private Comparator<Long> byTimeStamp() {
