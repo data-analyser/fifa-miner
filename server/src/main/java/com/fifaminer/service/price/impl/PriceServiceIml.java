@@ -104,8 +104,13 @@ public class PriceServiceIml implements PriceService {
     }
 
     @Override
-    public Integer getProfit(Long playerId) {
+    public Integer getBuyNowProfit(Long playerId) {
         return taxService.reduceTax(getSellBuyNowPrice(playerId)) - getMaxBuyPrice(playerId);
+    }
+
+    @Override
+    public Integer getStartProfit(Long playerId) {
+        return taxService.reduceTax(getSellStartPrice(playerId)) - getMaxBuyPrice(playerId);
     }
 
     @Override
@@ -113,10 +118,12 @@ public class PriceServiceIml implements PriceService {
         Integer maxBuyNowPrice = getMaxBuyPrice(playerId);
         Integer sellBuyNowPrice = getSellBuyNowPrice(playerId);
         Integer sellStartPrice = sellStartPolicy.define(sellBuyNowPrice);
-        Integer profit = taxService.reduceTax(sellBuyNowPrice) - maxBuyNowPrice;
+        Integer startProfit = taxService.reduceTax(sellStartPrice) - maxBuyNowPrice;
+        Integer buyNowProfit = taxService.reduceTax(sellBuyNowPrice) - maxBuyNowPrice;
 
         return new PlayerPrice(
-                playerId, maxBuyNowPrice, sellStartPrice, sellBuyNowPrice, profit,
+                playerId, maxBuyNowPrice, sellStartPrice,
+                sellBuyNowPrice, startProfit, buyNowProfit,
                 settingsService.getSetting(MAX_BUY_PRICE_STRATEGY),
                 settingsService.getSetting(SELL_START_PRICE_STRATEGY),
                 settingsService.getSetting(SELL_BUY_NOW_PRICE_STRATEGY)

@@ -14,7 +14,9 @@ public interface FifaMinerClient {
 
     Integer getSellBuyNowPrice(Long playerId);
 
-    Integer getProfit(Long playerId);
+    Integer getStartPriceProfit(Long playerId);
+
+    Integer getBuyNowPriceProfit(Long playerId);
 
     String getSetting(SettingTO settingTO);
 

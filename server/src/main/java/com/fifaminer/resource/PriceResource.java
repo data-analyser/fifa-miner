@@ -46,10 +46,17 @@ public class PriceResource {
     }
 
     @GET
-    @Path("{playerId}" + PROFIT)
+    @Path("{playerId}" + BUY_NOW_PROFIT)
     @Produces(APPLICATION_JSON)
-    public Integer getProfit(@PathParam("playerId") Long playerId) {
-        return priceService.getProfit(playerId);
+    public Integer getBuyNowProfit(@PathParam("playerId") Long playerId) {
+        return priceService.getBuyNowProfit(playerId);
+    }
+
+    @GET
+    @Path("{playerId}" + START_PROFIT)
+    @Produces(APPLICATION_JSON)
+    public Integer getStartProfit(@PathParam("playerId") Long playerId) {
+        return priceService.getStartProfit(playerId);
     }
 
     @GET
