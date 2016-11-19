@@ -11,7 +11,8 @@ public final class PlayerPriceTO {
     private final Integer maxBuyPrice;
     private final Integer sellStartPrice;
     private final Integer sellBuyNowPrice;
-    private final Integer profit;
+    private final Integer startProfit;
+    private final Integer buyNowProfit;
     private final String maxBuyPriceStrategy;
     private final String sellStartPriceStrategy;
     private final String sellBuyNowPriceStrategy;
@@ -21,7 +22,8 @@ public final class PlayerPriceTO {
                          @JsonProperty("maxBuyPrice") Integer maxBuyPrice,
                          @JsonProperty("sellStartPrice") Integer sellStartPrice,
                          @JsonProperty("sellBuyNowPrice") Integer sellBuyNowPrice,
-                         @JsonProperty("profit") Integer profit,
+                         @JsonProperty("startProfit") Integer startProfit,
+                         @JsonProperty("buyNowProfit") Integer buyNowProfit,
                          @JsonProperty("maxBuyPriceStrategy") String maxBuyPriceStrategy,
                          @JsonProperty("sellStartPriceStrategy") String sellStartPriceStrategy,
                          @JsonProperty("sellBuyNowPriceStrategy") String sellBuyNowPriceStrategy) {
@@ -29,7 +31,8 @@ public final class PlayerPriceTO {
         this.maxBuyPrice = maxBuyPrice;
         this.sellStartPrice = sellStartPrice;
         this.sellBuyNowPrice = sellBuyNowPrice;
-        this.profit = profit;
+        this.startProfit = startProfit;
+        this.buyNowProfit = buyNowProfit;
         this.maxBuyPriceStrategy = maxBuyPriceStrategy;
         this.sellStartPriceStrategy = sellStartPriceStrategy;
         this.sellBuyNowPriceStrategy = sellBuyNowPriceStrategy;
@@ -51,8 +54,8 @@ public final class PlayerPriceTO {
         return sellBuyNowPrice;
     }
 
-    public Integer getProfit() {
-        return profit;
+    public Integer getBuyNowProfit() {
+        return buyNowProfit;
     }
 
     public String getMaxBuyPriceStrategy() {
@@ -67,6 +70,10 @@ public final class PlayerPriceTO {
         return sellBuyNowPriceStrategy;
     }
 
+    public Integer getStartProfit() {
+        return startProfit;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -76,9 +83,12 @@ public final class PlayerPriceTO {
 
         if (playerId != null ? !playerId.equals(that.playerId) : that.playerId != null) return false;
         if (maxBuyPrice != null ? !maxBuyPrice.equals(that.maxBuyPrice) : that.maxBuyPrice != null) return false;
-        if (sellStartPrice != null ? !sellStartPrice.equals(that.sellStartPrice) : that.sellStartPrice != null) return false;
-        if (sellBuyNowPrice != null ? !sellBuyNowPrice.equals(that.sellBuyNowPrice) : that.sellBuyNowPrice != null) return false;
-        if (profit != null ? !profit.equals(that.profit) : that.profit != null) return false;
+        if (sellStartPrice != null ? !sellStartPrice.equals(that.sellStartPrice) : that.sellStartPrice != null)
+            return false;
+        if (sellBuyNowPrice != null ? !sellBuyNowPrice.equals(that.sellBuyNowPrice) : that.sellBuyNowPrice != null)
+            return false;
+        if (startProfit != null ? !startProfit.equals(that.startProfit) : that.startProfit != null) return false;
+        if (buyNowProfit != null ? !buyNowProfit.equals(that.buyNowProfit) : that.buyNowProfit != null) return false;
         if (maxBuyPriceStrategy != null ? !maxBuyPriceStrategy.equals(that.maxBuyPriceStrategy) : that.maxBuyPriceStrategy != null)
             return false;
         if (sellStartPriceStrategy != null ? !sellStartPriceStrategy.equals(that.sellStartPriceStrategy) : that.sellStartPriceStrategy != null)
@@ -93,10 +103,26 @@ public final class PlayerPriceTO {
         result = 31 * result + (maxBuyPrice != null ? maxBuyPrice.hashCode() : 0);
         result = 31 * result + (sellStartPrice != null ? sellStartPrice.hashCode() : 0);
         result = 31 * result + (sellBuyNowPrice != null ? sellBuyNowPrice.hashCode() : 0);
-        result = 31 * result + (profit != null ? profit.hashCode() : 0);
+        result = 31 * result + (startProfit != null ? startProfit.hashCode() : 0);
+        result = 31 * result + (buyNowProfit != null ? buyNowProfit.hashCode() : 0);
         result = 31 * result + (maxBuyPriceStrategy != null ? maxBuyPriceStrategy.hashCode() : 0);
         result = 31 * result + (sellStartPriceStrategy != null ? sellStartPriceStrategy.hashCode() : 0);
         result = 31 * result + (sellBuyNowPriceStrategy != null ? sellBuyNowPriceStrategy.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerPriceTO{" +
+                "playerId=" + playerId +
+                ", maxBuyPrice=" + maxBuyPrice +
+                ", sellStartPrice=" + sellStartPrice +
+                ", sellBuyNowPrice=" + sellBuyNowPrice +
+                ", startProfit=" + startProfit +
+                ", buyNowProfit=" + buyNowProfit +
+                ", maxBuyPriceStrategy='" + maxBuyPriceStrategy + '\'' +
+                ", sellStartPriceStrategy='" + sellStartPriceStrategy + '\'' +
+                ", sellBuyNowPriceStrategy='" + sellBuyNowPriceStrategy + '\'' +
+                '}';
     }
 }

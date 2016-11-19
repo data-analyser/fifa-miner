@@ -11,7 +11,8 @@ public class PlayerPrice {
     private final Integer maxBuyPrice;
     private final Integer sellStartPrice;
     private final Integer sellBuyNowPrice;
-    private final Integer profit;
+    private final Integer startProfit;
+    private final Integer buyNowProfit;
     private final String maxBuyPriceStrategy;
     private final String sellStartPriceStrategy;
     private final String sellBuyNowPriceStrategy;

@@ -10,7 +10,9 @@ public interface PriceService {
 
     Integer getSellBuyNowPrice(Long playerId);
 
-    Integer getProfit(Long playerId);
+    Integer getBuyNowProfit(Long playerId);
+
+    Integer getStartProfit(Long playerId);
 
     PlayerPrice getPricesSummary(Long playerId);
 

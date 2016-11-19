@@ -22,7 +22,8 @@ public class FifaMinerClientImplTest {
         fifaMinerClient.getMaxBuyPrice(20800L);
         fifaMinerClient.getSellStartPrice(20800L);
         fifaMinerClient.getSellBuyNowPrice(20800L);
-        fifaMinerClient.getProfit(20800L);
+        fifaMinerClient.getStartPriceProfit(20800L);
+        fifaMinerClient.getBuyNowPriceProfit(20800L);
         fifaMinerClient.getPricesSummary(20800L);
         fifaMinerClient.getPriceLimits(20800L, Platform.PC);
         fifaMinerClient.findPlayersByTransactionsAnalyse(

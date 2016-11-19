@@ -13,7 +13,8 @@ public class PlayerPriceConverter {
                 playerPrice.getMaxBuyPrice(),
                 playerPrice.getSellStartPrice(),
                 playerPrice.getSellBuyNowPrice(),
-                playerPrice.getProfit(),
+                playerPrice.getStartProfit(),
+                playerPrice.getBuyNowProfit(),
                 playerPrice.getMaxBuyPriceStrategy(),
                 playerPrice.getSellStartPriceStrategy(),
                 playerPrice.getSellBuyNowPriceStrategy()
