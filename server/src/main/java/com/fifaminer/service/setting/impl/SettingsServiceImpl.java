@@ -4,11 +4,13 @@ import com.fifaminer.repository.SettingRepository;
 import com.fifaminer.service.setting.SettingsService;
 import com.fifaminer.service.setting.model.SettingConfiguration;
 import com.fifaminer.service.setting.type.Setting;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static java.util.Objects.isNull;
 
+@Slf4j
 @Service
 public class SettingsServiceImpl implements SettingsService {
 
@@ -29,6 +31,7 @@ public class SettingsServiceImpl implements SettingsService {
 
     @Override
     public void updateSetting(SettingConfiguration settingConfiguration) {
+        log.info("Update setting = {}", settingConfiguration);
         settingRepository.save(settingConfiguration);
     }
 }

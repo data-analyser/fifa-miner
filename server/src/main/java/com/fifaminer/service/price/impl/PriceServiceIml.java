@@ -10,6 +10,7 @@ import com.fifaminer.service.price.policy.SellBuyNowPriceDefinitionPolicy;
 import com.fifaminer.service.price.model.PriceStatistics;
 import com.fifaminer.service.setting.SettingsService;
 import com.fifaminer.timeseries.TimeSeriesService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ import static org.apache.commons.collections4.MapUtils.isEmpty;
 import static org.apache.commons.collections4.MapUtils.isNotEmpty;
 import static org.apache.commons.lang3.math.NumberUtils.*;
 
+@Slf4j
 @Service
 public class PriceServiceIml implements PriceService {
 
@@ -64,9 +66,13 @@ public class PriceServiceIml implements PriceService {
 
     @Override
     public Integer getMaxBuyPrice(Long playerId) {
+        log.info("Get max buy price for player = {}", playerId);
         PriceHistory priceHistory = priceHistoryService.findByPlayerId(playerId);
 
-        if (isNull(priceHistory) || isEmpty(priceHistory.getHistory())) return INTEGER_ZERO;
+        if (isNull(priceHistory) || isEmpty(priceHistory.getHistory())) {
+            log.info("Cannot calculate max buy price, prices history is empty for player = {}", playerId);
+            return INTEGER_ZERO;
+        }
 
         List<PriceStatistics> priceStatistics = calculateStatistics(
                 priceHistory.getHistory()
@@ -75,11 +81,15 @@ public class PriceServiceIml implements PriceService {
         Double forecastedMin = timeSeriesService.forecast(
                 extractProperty(priceStatistics, value -> value.getMin().doubleValue())
         );
+
+        log.info("Forecasted min price = {}, for player id = {}", forecastedMin, playerId);
+
         return maxBuyPolicy.define(priceStatistics, forecastedMin);
     }
 
     @Override
     public Integer getSellStartPrice(Long playerId) {
+        log.info("Get sell start price for player id = {}", playerId);
         return sellStartPolicy.define(getSellBuyNowPrice(playerId));
     }
 
@@ -87,7 +97,10 @@ public class PriceServiceIml implements PriceService {
     public Integer getSellBuyNowPrice(Long playerId) {
         PriceHistory priceHistory = priceHistoryService.findByPlayerId(playerId);
 
-        if (isNull(priceHistory) || isEmpty(priceHistory.getHistory())) return INTEGER_ZERO;
+        if (isNull(priceHistory) || isEmpty(priceHistory.getHistory())) {
+            log.info("Cannot calculate sell buy now price, prices history is empty for player = {}", playerId);
+            return INTEGER_ZERO;
+        }
 
         List<PriceStatistics> priceStatistics = calculateStatistics(
                 priceHistory.getHistory()
@@ -96,10 +109,11 @@ public class PriceServiceIml implements PriceService {
         Double forecastedMedian = timeSeriesService.forecast(
                 extractProperty(priceStatistics, value -> value.getMedian().doubleValue())
         );
-
+        log.info("Forecasted median  = {} for player id = {}", forecastedMedian, playerId);
         Double forecastedMin = timeSeriesService.forecast(
                 extractProperty(priceStatistics, value -> value.getMin().doubleValue())
         );
+        log.info("Forecasted min  = {} for player id = {}", forecastedMin, playerId);
         return sellBuyNowPolicy.define(
                 forecastedMin,
                 forecastedMedian,
@@ -120,34 +134,49 @@ public class PriceServiceIml implements PriceService {
 
     @Override
     public Integer getBuyNowProfit(Long playerId) {
-        return taxService.reduceTax(getSellBuyNowPrice(playerId)) - getMaxBuyPrice(playerId);
+        log.info("Get buy now profit for player id = {}", playerId);
+        Integer profit = taxService.reduceTax(getSellBuyNowPrice(playerId)) - getMaxBuyPrice(playerId);
+        log.info("Buy now profit  = {} for player id = {}", profit, playerId);
+        return profit;
     }
 
     @Override
     public Integer getStartProfit(Long playerId) {
-        return taxService.reduceTax(getSellStartPrice(playerId)) - getMaxBuyPrice(playerId);
+        log.info("Get start sell profit for player id = {}", playerId);
+        Integer profit = taxService.reduceTax(getSellStartPrice(playerId)) - getMaxBuyPrice(playerId);
+        log.info("Start sell profit  = {} for player id = {}", profit, playerId);
+        return profit;
     }
 
     @Override
     public PlayerPrice getPricesSummary(Long playerId) {
+        log.info("Get prices summary for player id = {}", playerId);
+
         Integer maxBuyNowPrice = getMaxBuyPrice(playerId);
         Integer sellBuyNowPrice = getSellBuyNowPrice(playerId);
         Integer sellStartPrice = sellStartPolicy.define(sellBuyNowPrice);
         Integer startProfit = taxService.reduceTax(sellStartPrice) - maxBuyNowPrice;
         Integer buyNowProfit = taxService.reduceTax(sellBuyNowPrice) - maxBuyNowPrice;
 
-        return new PlayerPrice(
+        PlayerPrice playerPrice = new PlayerPrice(
                 playerId, maxBuyNowPrice, sellStartPrice,
                 sellBuyNowPrice, startProfit, buyNowProfit,
                 settingsService.getSetting(MAX_BUY_PRICE_STRATEGY),
                 settingsService.getSetting(SELL_START_PRICE_STRATEGY),
                 settingsService.getSetting(SELL_BUY_NOW_PRICE_STRATEGY)
         );
+
+        log.info("Calculated prices summary = {}", playerPrice);
+
+        return playerPrice;
     }
 
     @Override
     public boolean isPriceDistributionActual(Long playerId) {
-        return priceActualityPolicy.isActualPrices(getLastDistributionTime(playerId));
+        log.info("Check is actual prices distribution for player id = {}", playerId);
+        boolean isActual = priceActualityPolicy.isActualPrices(getLastDistributionTime(playerId));
+        log.info("Prices distribution is actual = {}, player id = {}", isActual, playerId);
+        return isActual;
     }
 
     private Long getLastDistributionTime(Long playerId) {

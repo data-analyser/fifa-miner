@@ -2,12 +2,10 @@ package com.fifaminer.service.transaction.impl;
 
 import com.fifaminer.entity.Transaction;
 import com.fifaminer.entity.Transaction.TransactionRecord;
-import com.fifaminer.entity.pojo.TransactionStatisticsData;
+import com.fifaminer.service.transaction.model.TransactionStatistics;
 import com.fifaminer.entity.pojo.TransactionType;
-import com.fifaminer.repository.TransactionAnalyseRepository;
 import com.fifaminer.service.common.ClockService;
 import com.fifaminer.service.transaction.TransactionAnalysingService;
-import com.fifaminer.entity.TransactionStatistics;
 import com.fifaminer.statistics.StatisticsService;
 import com.fifaminer.util.Percentage;
 import org.apache.commons.lang3.ArrayUtils;
@@ -15,76 +13,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static com.fifaminer.entity.pojo.TransactionType.*;
-import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.Long.compare;
-import static java.util.Collections.singletonList;
-import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.math.NumberUtils.*;
 
 @Service
 public class TransactionAnalysingServiceImpl implements TransactionAnalysingService {
 
-    private final TransactionAnalyseRepository transactionAnalyseRepository;
     private final StatisticsService statisticsService;
     private final ClockService clockService;
 
     @Autowired
-    public TransactionAnalysingServiceImpl(TransactionAnalyseRepository transactionAnalyseRepository,
-                                           StatisticsService statisticsService,
+    public TransactionAnalysingServiceImpl(StatisticsService statisticsService,
                                            ClockService clockService) {
         this.statisticsService = statisticsService;
-        this.transactionAnalyseRepository = transactionAnalyseRepository;
         this.clockService = clockService;
     }
 
     @Override
     public TransactionStatistics analyse(Transaction transaction) {
-        TransactionStatisticsData transactionStatisticsData = analyseTransaction(transaction);
-
-        TransactionStatistics transactionStatistics = transactionAnalyseRepository.findOne(transaction.getPlayerId());
-
-        if (isNull(transactionStatistics)) {
-            return new TransactionStatistics(transaction.getPlayerId(), newArrayList(transactionStatisticsData));
-        }
-
-        transactionStatistics.getStatisticsData().add(transactionStatisticsData);
-        return transactionStatistics;
-    }
-
-    @Override
-    public TransactionStatistics analyseOnFly(Transaction transaction) {
-        return new TransactionStatistics(
-                transaction.getPlayerId(), singletonList(analyseTransaction(transaction))
-        );
-    }
-
-    @Override
-    public void saveAll(List<TransactionStatistics> transactionStatistics) {
-        transactionAnalyseRepository.save(transactionStatistics);
-    }
-
-    @Override
-    public Optional<TransactionStatistics> findByPlayerId(Long playerId) {
-        return Optional.ofNullable(transactionAnalyseRepository.findOne(playerId));
-    }
-
-    @Override
-    public void save(TransactionStatistics transactionStatistics) {
-        transactionAnalyseRepository.save(transactionStatistics);
-    }
-
-    private TransactionStatisticsData analyseTransaction(Transaction transaction) {
         List<TransactionRecord> records = transaction.getRecords();
 
         Long relists = getTransactionCountByType(records, RELIST);
         Long sells = getTransactionCountByType(records, SELL_CARD);
 
-        return new TransactionStatisticsData(
+        return new TransactionStatistics(
+                transaction.getPlayerId(),
                 clockService.now(),
                 getTransactionCountByType(records, BOUGHT_CARD, BOUGHT_BY_ROBOT),
                 getTransactionCountByType(records, PLACED_TO_MARKET),

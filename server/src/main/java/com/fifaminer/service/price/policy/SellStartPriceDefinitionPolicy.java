@@ -4,9 +4,11 @@ package com.fifaminer.service.price.policy;
 import com.fifaminer.service.price.SellStartPriceStrategyService;
 import com.fifaminer.service.price.PriceBoundService;
 import com.fifaminer.service.price.type.BoundSelection;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class SellStartPriceDefinitionPolicy {
 
@@ -23,6 +25,8 @@ public class SellStartPriceDefinitionPolicy {
     public Integer define(Integer sellBuyNowPrice) {
         Integer sellStartPriceByStrategy = sellStartPriceStrategyService.findActiveSellStartStrategy()
                 .calculate(sellBuyNowPrice);
-        return priceBoundService.arrangeToBound(sellStartPriceByStrategy, BoundSelection.HIGHER);
+        Integer price = priceBoundService.arrangeToBound(sellStartPriceByStrategy, BoundSelection.HIGHER);
+        log.info("Calculated sell start price = {} by sell buy now price = {}", price, sellBuyNowPrice);
+        return price;
     }
 }

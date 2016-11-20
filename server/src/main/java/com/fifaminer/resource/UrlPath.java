@@ -10,9 +10,7 @@ public final class UrlPath {
     public static final String BUY_NOW_PROFIT = "/buy-now-profit";
     public static final String START_PROFIT = "/start-profit";
     public static final String SUMMARY = "/summary";
-    public static final String MARKETING = "/marketing";
-    public static final String OPERATIONS = "/operations";
-    public static final String TRANSACTION_ANALYSE = "/transaction-analyse";
+    public static final String PLAYER_TRANSACTIONS = "/player-transactions";
     public static final String LIMITS = "/limits";
     public static final String IS_ACTUAL = "/is-actual";
 }
