@@ -16,7 +16,7 @@ public class MaxBuyPriceStrategyServiceImpl implements MaxBuyPriceStrategyServic
     private final SettingsService settingsService;
     private final Map<String, MaxBuyPriceStrategy> maxBuyPriceStrategies;
 
-    private static final String DEFAULT_STRATEGY = "lowerFewBidsFromFallenPriceStrategy";
+    private static final String DEFAULT_STRATEGY = "reduce20FromCurrentMinStrategy";
 
     @Autowired
     public MaxBuyPriceStrategyServiceImpl(SettingsService settingsService,
