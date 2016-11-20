@@ -17,7 +17,7 @@ public class LowerFewBidsFromFallenPriceStrategy implements MaxBuyPriceStrategy 
 
     private final PriceBoundService priceBoundService;
 
-    private static final Integer BID_STEPS = 1;
+    private static final Integer BID_STEPS = 2;
 
     @Autowired
     public LowerFewBidsFromFallenPriceStrategy(PriceBoundService priceBoundService) {
