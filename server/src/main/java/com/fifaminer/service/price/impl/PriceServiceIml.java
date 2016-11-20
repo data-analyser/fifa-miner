@@ -100,7 +100,22 @@ public class PriceServiceIml implements PriceService {
         Double forecastedMin = timeSeriesService.forecast(
                 extractProperty(priceStatistics, value -> value.getMin().doubleValue())
         );
-        return sellBuyNowPolicy.define(forecastedMin, forecastedMedian, priceStatistics);
+        return sellBuyNowPolicy.define(
+                forecastedMin,
+                forecastedMedian,
+                getLastPriceDistribution(priceHistory.getHistory())
+        );
+    }
+
+    private Map<Integer, Integer> getLastPriceDistribution(Map<Long, Map<Integer, Integer>> history) {
+        Long lastPricesWithData = history.entrySet().stream()
+                .filter(entry -> isNotEmpty(entry.getValue()))
+                .map(Entry::getKey)
+                .sorted(byTimeStamp().reversed())
+                .findFirst()
+                .orElse(LONG_ZERO);
+
+        return history.get(lastPricesWithData);
     }
 
     @Override
