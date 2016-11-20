@@ -2,44 +2,35 @@ package com.fifaminer.service.price.policy;
 
 import com.fifaminer.service.price.PriceBoundService;
 import com.fifaminer.service.price.SellBuyNowPriceStrategyService;
-import com.fifaminer.service.price.TaxService;
 import com.fifaminer.service.price.model.SellBuyNowPriceDefinitionContext;
-import com.fifaminer.service.price.model.PriceStatistics;
 import com.fifaminer.service.price.type.BoundSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Map;
 
 @Component
 public class SellBuyNowPriceDefinitionPolicy {
 
-    private final TaxService taxService;
     private final PriceBoundService priceBoundService;
     private final SellBuyNowPriceStrategyService sellBuyNowPriceStrategyService;
 
     @Autowired
-    public SellBuyNowPriceDefinitionPolicy(TaxService taxService,
-                                           PriceBoundService priceBoundService,
+    public SellBuyNowPriceDefinitionPolicy(PriceBoundService priceBoundService,
                                            SellBuyNowPriceStrategyService sellBuyNowPriceStrategyService) {
-        this.taxService = taxService;
         this.priceBoundService = priceBoundService;
         this.sellBuyNowPriceStrategyService = sellBuyNowPriceStrategyService;
     }
 
     public Integer define(Double forecastedMin,
                           Double forecastedMedian,
-                          List<PriceStatistics> priceStatistics) {
+                          Map<Integer, Integer> lastPriceDistribution) {
         SellBuyNowPriceDefinitionContext sellBuyNowPriceDefinitionContext = new SellBuyNowPriceDefinitionContext(
-                forecastedMin.intValue(), forecastedMedian.intValue(), priceStatistics);
+                forecastedMin.intValue(), forecastedMedian.intValue(), lastPriceDistribution);
 
         Integer sellBuyNowPriceByStrategy = sellBuyNowPriceStrategyService.findActiveSellBuyNowStrategy()
                 .calculate(sellBuyNowPriceDefinitionContext);
 
-        // TODO: 17.11.2016  Difference between forecasted median and median less than one bid
-
-        return priceBoundService.arrangeToBound(
-                taxService.addTax(sellBuyNowPriceByStrategy), BoundSelection.HIGHER
-        );
+        return priceBoundService.arrangeToBound(sellBuyNowPriceByStrategy, BoundSelection.HIGHER);
     }
 }
