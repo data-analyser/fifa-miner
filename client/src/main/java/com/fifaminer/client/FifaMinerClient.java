@@ -24,6 +24,8 @@ public interface FifaMinerClient {
 
     PlayerPriceTO getPricesSummary(Long playerId);
 
+    List<PlayerPriceTO> getPricesSummaryForPlayers(List<Long> playerIds);
+
     List<Long> findPlayersByTransactionsAnalyse(Long startTime, Long endTime, OrderingTypeTO orderingTypeTO, Integer limit);
 
     List<Long> findPlayersByTransactionsAnalyse(Duration duration, OrderingTypeTO orderingTypeTO, Integer limit);

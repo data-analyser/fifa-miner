@@ -11,7 +11,10 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 
+import java.util.List;
+
 import static com.fifaminer.resource.UrlPath.*;
+import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Component
@@ -71,6 +74,16 @@ public class PriceResource {
     @Produces(APPLICATION_JSON)
     public PlayerPriceTO getPricesSummary(@PathParam("playerId") Long playerId) {
         return converter.toTO(priceService.getPricesSummary(playerId));
+    }
+
+    @POST
+    @Path("summary")
+    @Produces(APPLICATION_JSON)
+    public List<PlayerPriceTO> getPricesSummaryForPlayers(List<Long> playerIds) {
+        return playerIds.stream()
+                .map(priceService::getPricesSummary)
+                .map(converter::toTO)
+                .collect(toList());
     }
 
     @GET

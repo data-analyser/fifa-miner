@@ -45,6 +45,10 @@ public class OneBidLessThanFirstMaximum implements SellBuyNowPriceStrategy {
                 context.getPricesDistribution()
         );
 
+        if (pricesDistribution.size() == 0) {
+            return min(context.getPricesDistribution().keySet());
+        }
+
         if (pricesDistribution.size() <= MIN_PRICE_DISTRIBUTION_SIZE)
             return getMinimalSellersPrice(pricesDistribution);
 

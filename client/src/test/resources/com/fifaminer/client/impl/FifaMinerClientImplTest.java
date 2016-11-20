@@ -4,6 +4,7 @@ import com.fifaminer.client.FifaMinerClient;
 import com.fifaminer.client.dto.Duration;
 import com.fifaminer.client.dto.OrderingTypeTO;
 import com.fifaminer.client.dto.Platform;
+import jersey.repackaged.com.google.common.collect.ImmutableList;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -31,5 +32,8 @@ public class FifaMinerClientImplTest {
         );
         fifaMinerClient.findPlayersByTransactionsAnalyse(Duration.TODAY, OrderingTypeTO.MAX_SELLS, 5);
         fifaMinerClient.isPriceDistributionActual(20800L);
+        fifaMinerClient.getPricesSummaryForPlayers(
+                ImmutableList.of(172879L, 193352L, 164468L, 183285L, 152554L)
+        );
     }
 }
