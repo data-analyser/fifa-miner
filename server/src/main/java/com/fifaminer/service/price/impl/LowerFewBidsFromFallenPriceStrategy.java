@@ -17,7 +17,8 @@ public class LowerFewBidsFromFallenPriceStrategy implements MaxBuyPriceStrategy 
 
     private final PriceBoundService priceBoundService;
 
-    private static final Integer BID_STEPS = 2;
+    private static final Integer NEGATIVE_TREND_BIDS = 2;
+    private static final Integer POSITIVE_TREND_BIDS = 1;
 
     @Autowired
     public LowerFewBidsFromFallenPriceStrategy(PriceBoundService priceBoundService) {
@@ -30,9 +31,9 @@ public class LowerFewBidsFromFallenPriceStrategy implements MaxBuyPriceStrategy 
         Integer forecastedMin = context.getForecastedMin();
 
         if (isNegativeTrend(currentMin, forecastedMin)) {
-            return priceBoundService.arrangeToSteps(forecastedMin, BID_STEPS, BoundSelection.LOWER);
+            return priceBoundService.arrangeToSteps(currentMin, NEGATIVE_TREND_BIDS, BoundSelection.LOWER);
         }
-        return currentMin;
+        return priceBoundService.arrangeToSteps(currentMin, POSITIVE_TREND_BIDS, BoundSelection.LOWER);
     }
 
     private boolean isNegativeTrend(Integer currentMin, Integer forecastedMin) {
