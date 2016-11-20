@@ -32,12 +32,6 @@ public class FifaMinerClientImpl implements FifaMinerClient {
     }
 
     @Override
-    public void runForceTransactionAnalyse() {
-        client.resource(getUrl("/operations/transaction-analyse"))
-                .post();
-    }
-
-    @Override
     public Integer getMaxBuyPrice(Long playerId) {
         return client.resource(getUrl("/prices/" + playerId + "/max-buy"))
                 .type(MediaType.APPLICATION_JSON_TYPE)
@@ -105,14 +99,14 @@ public class FifaMinerClientImpl implements FifaMinerClient {
                                                        Long endTime,
                                                        OrderingTypeTO orderingTypeTO,
                                                        Integer limit) {
-        return client.resource(getUrl(buildMarketingRequestUrl(startTime, endTime, orderingTypeTO, limit)))
+        return client.resource(getUrl(buildPlayerTransactionsRequestUrl(startTime, endTime, orderingTypeTO, limit)))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<Long>>() {});
     }
 
     @Override
     public List<Long> findPlayersByTransactionsAnalyse(Duration duration, OrderingTypeTO orderingTypeTO, Integer limit) {
-        return client.resource(getUrl(buildDurationMarketingRequestUrl(duration, orderingTypeTO, limit)))
+        return client.resource(getUrl(buildDurationPlayerTransactionsRequestUrl(duration, orderingTypeTO, limit)))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<Long>>() {});
     }
@@ -143,10 +137,10 @@ public class FifaMinerClientImpl implements FifaMinerClient {
                 .get(Boolean.class);
     }
 
-    private String buildDurationMarketingRequestUrl(Duration duration,
-                                                    OrderingTypeTO orderingTypeTO,
-                                                    Integer limit) {
-        return UriBuilder.fromPath("/marketing/duration")
+    private String buildDurationPlayerTransactionsRequestUrl(Duration duration,
+                                                             OrderingTypeTO orderingTypeTO,
+                                                             Integer limit) {
+        return UriBuilder.fromPath("/player-transactions/duration")
                 .queryParam("duration", duration)
                 .queryParam("orderingType", orderingTypeTO)
                 .queryParam("limit", limit)
@@ -154,11 +148,11 @@ public class FifaMinerClientImpl implements FifaMinerClient {
                 .toString();
     }
 
-    private String buildMarketingRequestUrl(Long startTime,
-                                            Long endTime,
-                                            OrderingTypeTO orderingTypeTO,
-                                            Integer limit) {
-        return UriBuilder.fromPath("/marketing/range")
+    private String buildPlayerTransactionsRequestUrl(Long startTime,
+                                                     Long endTime,
+                                                     OrderingTypeTO orderingTypeTO,
+                                                     Integer limit) {
+        return UriBuilder.fromPath("/player-transactions/range")
                 .queryParam("startTime", startTime)
                 .queryParam("endTime", endTime)
                 .queryParam("orderingType", orderingTypeTO)

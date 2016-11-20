@@ -4,11 +4,13 @@ import com.fifaminer.service.price.PriceBoundService;
 import com.fifaminer.service.price.SellBuyNowPriceStrategyService;
 import com.fifaminer.service.price.model.SellBuyNowPriceDefinitionContext;
 import com.fifaminer.service.price.type.BoundSelection;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@Slf4j
 @Component
 public class SellBuyNowPriceDefinitionPolicy {
 
@@ -31,6 +33,8 @@ public class SellBuyNowPriceDefinitionPolicy {
         Integer sellBuyNowPriceByStrategy = sellBuyNowPriceStrategyService.findActiveSellBuyNowStrategy()
                 .calculate(sellBuyNowPriceDefinitionContext);
 
-        return priceBoundService.arrangeToBound(sellBuyNowPriceByStrategy, BoundSelection.HIGHER);
+        Integer price = priceBoundService.arrangeToBound(sellBuyNowPriceByStrategy, BoundSelection.HIGHER);
+        log.info("Calculated sell buy now price = {} by context = {}", price, sellBuyNowPriceByStrategy);
+        return price;
     }
 }

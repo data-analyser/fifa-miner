@@ -6,11 +6,13 @@ import com.fifaminer.service.price.model.MaxBuyPriceDefinitionContext;
 import com.fifaminer.service.price.model.PriceStatistics;
 import com.fifaminer.service.price.type.BoundSelection;
 import com.google.common.collect.Iterables;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 public class MaxBuyPriceDefinitionPolicy {
 
@@ -28,8 +30,13 @@ public class MaxBuyPriceDefinitionPolicy {
         Integer currentMin = Iterables.getLast(priceStatistics)
                 .getMin();
 
+        log.info("Current min = {} , forecasted min = {}", currentMin, forecastedMin);
+
         Integer maxBuyPriceByStrategy = maxBuyPriceStrategyService.findActiveBuyStrategy()
                 .calculate(new MaxBuyPriceDefinitionContext(forecastedMin.intValue(), currentMin));
-        return priceBoundService.arrangeToBound(maxBuyPriceByStrategy, BoundSelection.LOWER);
+
+        Integer price = priceBoundService.arrangeToBound(maxBuyPriceByStrategy, BoundSelection.LOWER);
+        log.info("Calculated max buy price = {}", price);
+        return price;
     }
 }

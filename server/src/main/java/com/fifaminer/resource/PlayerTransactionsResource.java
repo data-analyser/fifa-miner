@@ -2,7 +2,7 @@ package com.fifaminer.resource;
 
 import com.fifaminer.client.dto.Duration;
 import com.fifaminer.client.dto.OrderingTypeTO;
-import com.fifaminer.service.marketing.MarketingService;
+import com.fifaminer.service.marketing.PlayerTransactionsService;
 import com.fifaminer.service.marketing.type.OrderingType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,14 +17,14 @@ import java.util.List;
 import static com.fifaminer.resource.UrlPath.*;
 
 @Component
-@Path(MARKETING)
-public class PlayersMarketingResource {
+@Path(PLAYER_TRANSACTIONS)
+public class PlayerTransactionsResource {
 
-    private final MarketingService marketingService;
+    private final PlayerTransactionsService playerTransactionsService;
 
     @Autowired
-    public PlayersMarketingResource(MarketingService marketingService) {
-        this.marketingService = marketingService;
+    public PlayerTransactionsResource(PlayerTransactionsService playerTransactionsService) {
+        this.playerTransactionsService = playerTransactionsService;
     }
 
     @GET
@@ -34,7 +34,7 @@ public class PlayersMarketingResource {
                                              @QueryParam("endTime") Long endTime,
                                              @QueryParam("orderingType") OrderingTypeTO orderingTypeTO,
                                              @QueryParam("limit") Integer limit) {
-        return marketingService.findPlayersByTransactionAnalyse(
+        return playerTransactionsService.findPlayers(
                 startTime, endTime, OrderingType.valueOf(orderingTypeTO.name()), limit
         );
     }
@@ -45,7 +45,7 @@ public class PlayersMarketingResource {
     public List<Long> findPlayersByDuration(@QueryParam("duration") Duration duration,
                                             @QueryParam("orderingType") OrderingTypeTO orderingTypeTO,
                                             @QueryParam("limit") Integer limit) {
-        return marketingService.findPlayersByTransactionAnalyse(
+        return playerTransactionsService.findPlayers(
                 duration, OrderingType.valueOf(orderingTypeTO.name()), limit
         );
     }

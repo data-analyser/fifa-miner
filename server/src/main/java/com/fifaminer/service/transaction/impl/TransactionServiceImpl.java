@@ -23,11 +23,6 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> findAll() {
-        return transactionRepository.findAll();
-    }
-
-    @Override
     public List<Transaction> findRecordsWhereTimestampBetween(Long startTime, Long endTime) {
         return transactionRepository.findAll()
                 .stream()

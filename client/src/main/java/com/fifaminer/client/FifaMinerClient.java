@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface FifaMinerClient {
 
-    void runForceTransactionAnalyse();
-
     Integer getMaxBuyPrice(Long playerId);
 
     Integer getSellStartPrice(Long playerId);

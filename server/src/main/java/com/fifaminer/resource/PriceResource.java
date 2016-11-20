@@ -6,6 +6,7 @@ import com.fifaminer.client.dto.PriceLimits;
 import com.fifaminer.converter.PlayerPriceConverter;
 import com.fifaminer.service.price.PriceLimitService;
 import com.fifaminer.service.price.PriceService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import static com.fifaminer.resource.UrlPath.*;
 import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+@Slf4j
 @Component
 @Path(PRICES)
 public class PriceResource {
@@ -80,6 +82,7 @@ public class PriceResource {
     @Path("summary")
     @Produces(APPLICATION_JSON)
     public List<PlayerPriceTO> getPricesSummaryForPlayers(List<Long> playerIds) {
+        log.info("Get prices summary for players = {}", playerIds);
         return playerIds.stream()
                 .map(priceService::getPricesSummary)
                 .map(converter::toTO)
