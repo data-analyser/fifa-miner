@@ -1,6 +1,6 @@
 package com.fifaminer.service.price.impl;
 
-import com.fifaminer.service.price.SellStartPriceStrategy;
+import com.fifaminer.service.price.strategy.SellStartPriceStrategy;
 import com.fifaminer.service.price.SellStartPriceStrategyService;
 import com.fifaminer.service.setting.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-import static com.fifaminer.service.setting.type.Setting.SELL_START_PRICE_STRATEGY;
+import static com.fifaminer.client.dto.strategy.PriceStrategy.SELL_START_PRICE;
 
 @Service
 public class SellStartPriceStrategyServiceImpl implements SellStartPriceStrategyService {
@@ -27,7 +27,7 @@ public class SellStartPriceStrategyServiceImpl implements SellStartPriceStrategy
 
     @Override
     public SellStartPriceStrategy findActiveSellStartStrategy() {
-        String activeSellStartStrategy = settingsService.getSetting(SELL_START_PRICE_STRATEGY);
+        String activeSellStartStrategy = settingsService.getSetting(SELL_START_PRICE.name());
         return sellStartPriceStrategies.getOrDefault(
                 activeSellStartStrategy, sellStartPriceStrategies.get(DEFAULT_STRATEGY)
         );

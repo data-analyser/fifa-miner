@@ -1,4 +1,4 @@
-package com.fifaminer.service.price;
+package com.fifaminer.service.price.strategy;
 
 import com.fifaminer.service.price.model.SellBuyNowPriceDefinitionContext;
 

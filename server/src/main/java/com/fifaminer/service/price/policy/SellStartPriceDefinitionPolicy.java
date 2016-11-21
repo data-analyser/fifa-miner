@@ -1,6 +1,5 @@
 package com.fifaminer.service.price.policy;
 
-
 import com.fifaminer.service.price.SellStartPriceStrategyService;
 import com.fifaminer.service.price.PriceBoundService;
 import com.fifaminer.service.price.type.BoundSelection;

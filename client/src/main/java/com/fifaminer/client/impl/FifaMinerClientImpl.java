@@ -3,6 +3,10 @@ package com.fifaminer.client.impl;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.fifaminer.client.FifaMinerClient;
 import com.fifaminer.client.dto.*;
+import com.fifaminer.client.dto.strategy.MaxBuyStrategy;
+import com.fifaminer.client.dto.strategy.PriceStrategy;
+import com.fifaminer.client.dto.strategy.SellBuyNowStrategy;
+import com.fifaminer.client.dto.strategy.SellStartStrategy;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.config.ClientConfig;
@@ -13,6 +17,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URL;
 import java.util.List;
 
+import static com.fifaminer.client.dto.strategy.PriceStrategy.*;
 import static com.fifaminer.client.util.Strings.isNullOrEmpty;
 
 public class FifaMinerClientImpl implements FifaMinerClient {
@@ -64,20 +69,6 @@ public class FifaMinerClientImpl implements FifaMinerClient {
         return client.resource(getUrl("/prices/" + playerId + "/buy-now-profit"))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(Integer.class);
-    }
-
-    @Override
-    public String getSetting(SettingTO settingTO) {
-        return client.resource(getUrl("/settings/" + settingTO.name()))
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .get(String.class);
-    }
-
-    @Override
-    public void updateSetting(SettingConfigurationTO settingConfigurationTO) {
-        client.resource(getUrl("/settings/"))
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .put(settingConfigurationTO);
     }
 
     @Override
@@ -135,6 +126,34 @@ public class FifaMinerClientImpl implements FifaMinerClient {
         return client.resource(getUrl("/prices/" + playerId + "/is-actual"))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(Boolean.class);
+    }
+
+    @Override
+    public void enableMaxBuyPriceStrategy(MaxBuyStrategy maxBuyStrategy) {
+        enableStrategy(MAX_BUY_PRICE.name(), maxBuyStrategy.getStrategyName());
+    }
+
+    @Override
+    public void enableSellStartPriceStrategy(SellStartStrategy sellStartStrategy) {
+        enableStrategy(SELL_START_PRICE.name(), sellStartStrategy.getStrategyName());
+    }
+
+    @Override
+    public void enableSellBuyNowPriceStrategy(SellBuyNowStrategy sellBuyNowStrategy) {
+        enableStrategy(SELL_BUY_NOW_PRICE.name(), sellBuyNowStrategy.getStrategyName());
+    }
+
+    @Override
+    public String getActiveStrategy(PriceStrategy priceStrategy) {
+        return client.resource(getUrl("/settings/" + priceStrategy.name()))
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .get(String.class);
+    }
+
+    private void enableStrategy(String strategyType, String strategyName) {
+        client.resource(getUrl("/settings"))
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .put(new SettingConfigurationTO(strategyType, strategyName));
     }
 
     private String buildDurationPlayerTransactionsRequestUrl(Duration duration,

@@ -1,6 +1,6 @@
 package com.fifaminer.service.price.impl;
 
-import com.fifaminer.service.price.SellBuyNowPriceStrategy;
+import com.fifaminer.service.price.strategy.SellBuyNowPriceStrategy;
 import com.fifaminer.service.price.SellBuyNowPriceStrategyService;
 import com.fifaminer.service.setting.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-import static com.fifaminer.service.setting.type.Setting.SELL_BUY_NOW_PRICE_STRATEGY;
+import static com.fifaminer.client.dto.strategy.PriceStrategy.SELL_BUY_NOW_PRICE;
 
 @Service
 public class SellBuyNowPriceStrategyServiceImpl implements SellBuyNowPriceStrategyService {
@@ -16,7 +16,7 @@ public class SellBuyNowPriceStrategyServiceImpl implements SellBuyNowPriceStrate
     private final SettingsService settingsService;
     private final Map<String, SellBuyNowPriceStrategy> sellBuyNowPriceStrategies;
 
-    private static final String DEFAULT_STRATEGY = "oneBidLessThanFirstMaximum";
+    private static final String DEFAULT_STRATEGY = "oneBidLessThanFirstMaximumStrategy";
 
     @Autowired
     public SellBuyNowPriceStrategyServiceImpl(SettingsService settingsService,
@@ -27,7 +27,7 @@ public class SellBuyNowPriceStrategyServiceImpl implements SellBuyNowPriceStrate
 
     @Override
     public SellBuyNowPriceStrategy findActiveSellBuyNowStrategy() {
-        String activeSellBuyNowPriceStrategy = settingsService.getSetting(SELL_BUY_NOW_PRICE_STRATEGY);
+        String activeSellBuyNowPriceStrategy = settingsService.getSetting(SELL_BUY_NOW_PRICE.name());
         return sellBuyNowPriceStrategies.getOrDefault(
                 activeSellBuyNowPriceStrategy, sellBuyNowPriceStrategies.get(DEFAULT_STRATEGY)
         );

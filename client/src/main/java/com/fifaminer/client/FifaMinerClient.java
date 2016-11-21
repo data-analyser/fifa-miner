@@ -1,6 +1,10 @@
 package com.fifaminer.client;
 
 import com.fifaminer.client.dto.*;
+import com.fifaminer.client.dto.strategy.MaxBuyStrategy;
+import com.fifaminer.client.dto.strategy.PriceStrategy;
+import com.fifaminer.client.dto.strategy.SellBuyNowStrategy;
+import com.fifaminer.client.dto.strategy.SellStartStrategy;
 
 import java.util.List;
 
@@ -16,10 +20,6 @@ public interface FifaMinerClient {
 
     Integer getBuyNowPriceProfit(Long playerId);
 
-    String getSetting(SettingTO settingTO);
-
-    void updateSetting(SettingConfigurationTO settingConfigurationTO);
-
     PlayerPriceTO getPricesSummary(Long playerId);
 
     List<PlayerPriceTO> getPricesSummaryForPlayers(List<Long> playerIds);
@@ -33,5 +33,13 @@ public interface FifaMinerClient {
     boolean isHealthy();
 
     boolean isPriceDistributionActual(Long playerId);
+
+    void enableMaxBuyPriceStrategy(MaxBuyStrategy maxBuyStrategy);
+
+    void enableSellStartPriceStrategy(SellStartStrategy sellStartStrategy);
+
+    void enableSellBuyNowPriceStrategy(SellBuyNowStrategy sellBuyNowStrategy);
+
+    String getActiveStrategy(PriceStrategy priceStrategy);
 }
 

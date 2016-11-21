@@ -1,9 +1,9 @@
-package com.fifaminer.service.price.impl;
+package com.fifaminer.service.price.strategy.impl;
 
 import com.fifaminer.service.common.ClockService;
 import com.fifaminer.service.price.PriceBoundService;
 import com.fifaminer.service.price.PriceStatisticsService;
-import com.fifaminer.service.price.SellBuyNowPriceStrategy;
+import com.fifaminer.service.price.strategy.SellBuyNowPriceStrategy;
 import com.fifaminer.service.price.model.DeviationPriceDistribution;
 import com.fifaminer.service.price.model.PriceStatistics;
 import com.fifaminer.service.price.model.PricesDistribution;
@@ -22,18 +22,19 @@ import static java.util.Collections.min;
 import static java.util.stream.Collectors.toList;
 
 @Component
-public class OneBidLessThanFirstMaximum implements SellBuyNowPriceStrategy {
+public class OneBidLessThanFirstMaximumStrategy implements SellBuyNowPriceStrategy {
 
     private final PriceBoundService priceBoundService;
     private final PriceStatisticsService priceStatisticsService;
     private final ClockService clockService;
 
     private static final int BID_STEPS = 1;
+    private static final int PROCESSABLE_DEVIATIONS = 2;
     private static final int MIN_PRICE_DISTRIBUTION_SIZE = 2;
 
-    public OneBidLessThanFirstMaximum(PriceBoundService priceBoundService,
-                                      PriceStatisticsService priceStatisticsService,
-                                      ClockService clockService) {
+    public OneBidLessThanFirstMaximumStrategy(PriceBoundService priceBoundService,
+                                              PriceStatisticsService priceStatisticsService,
+                                              ClockService clockService) {
         this.priceBoundService = priceBoundService;
         this.priceStatisticsService = priceStatisticsService;
         this.clockService = clockService;
@@ -84,7 +85,7 @@ public class OneBidLessThanFirstMaximum implements SellBuyNowPriceStrategy {
 
         PricesDistribution targetSellers = pricesDeviation.stream()
                 .sorted(byDeviation().reversed())
-                .limit(2)
+                .limit(PROCESSABLE_DEVIATIONS)
                 .map(DeviationPriceDistribution::getPricesDistribution)
                 .sorted(byPrice())
                 .findFirst()
