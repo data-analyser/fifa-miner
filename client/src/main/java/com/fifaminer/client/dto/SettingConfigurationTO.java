@@ -10,19 +10,19 @@ import javax.validation.constraints.NotNull;
 public final class SettingConfigurationTO {
 
     @NotNull
-    private final SettingTO settingTO;
+    private final String settingName;
     @NotNull
     private final String value;
 
     @JsonCreator
-    public SettingConfigurationTO(@JsonProperty("settingTO") SettingTO settingTO,
+    public SettingConfigurationTO(@JsonProperty("settingName") String settingName,
                                   @JsonProperty("value") String value) {
-        this.settingTO = settingTO;
+        this.settingName = settingName;
         this.value = value;
     }
 
-    public SettingTO getSettingTO() {
-        return settingTO;
+    public String getSettingName() {
+        return settingName;
     }
 
     public String getValue() {
@@ -36,14 +36,14 @@ public final class SettingConfigurationTO {
 
         SettingConfigurationTO that = (SettingConfigurationTO) o;
 
-        if (settingTO != that.settingTO) return false;
+        if (settingName != null ? !settingName.equals(that.settingName) : that.settingName != null) return false;
         return value != null ? value.equals(that.value) : that.value == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = settingTO != null ? settingTO.hashCode() : 0;
+        int result = settingName != null ? settingName.hashCode() : 0;
         result = 31 * result + (value != null ? value.hashCode() : 0);
         return result;
     }

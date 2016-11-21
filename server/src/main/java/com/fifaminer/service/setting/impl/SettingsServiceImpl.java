@@ -3,7 +3,6 @@ package com.fifaminer.service.setting.impl;
 import com.fifaminer.repository.SettingRepository;
 import com.fifaminer.service.setting.SettingsService;
 import com.fifaminer.service.setting.model.SettingConfiguration;
-import com.fifaminer.service.setting.type.Setting;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,14 +23,14 @@ public class SettingsServiceImpl implements SettingsService {
     }
 
     @Override
-    public String getSetting(Setting setting) {
-        SettingConfiguration configuration = settingRepository.findOne(setting);
-        return isNull(configuration) ? DEFAULT : configuration.getValue();
-    }
-
-    @Override
     public void updateSetting(SettingConfiguration settingConfiguration) {
         log.info("Update setting = {}", settingConfiguration);
         settingRepository.save(settingConfiguration);
+    }
+
+    @Override
+    public String getSetting(String settingName) {
+        SettingConfiguration configuration = settingRepository.findOne(settingName);
+        return isNull(configuration) ? DEFAULT : configuration.getValue();
     }
 }

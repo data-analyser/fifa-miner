@@ -1,7 +1,6 @@
 package com.fifaminer.service.price.policy;
 
-
-import com.fifaminer.service.price.SellStartPriceStrategyService;
+import com.fifaminer.service.price.strategy.SellStartPriceStrategyService;
 import com.fifaminer.service.price.PriceBoundService;
 import com.fifaminer.service.price.type.BoundSelection;
 import lombok.extern.slf4j.Slf4j;

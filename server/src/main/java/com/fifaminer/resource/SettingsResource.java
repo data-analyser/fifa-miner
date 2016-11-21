@@ -3,7 +3,6 @@ package com.fifaminer.resource;
 import com.fifaminer.converter.SettingConfigurationConverter;
 import com.fifaminer.service.setting.SettingsService;
 import com.fifaminer.client.dto.SettingConfigurationTO;
-import com.fifaminer.service.setting.type.Setting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,8 +28,8 @@ public class SettingsResource {
     @GET
     @Path("/{settingName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getSetting(@PathParam("settingName") Setting setting) {
-        return settingsService.getSetting(setting);
+    public String getSetting(@PathParam("settingName") String settingName) {
+        return settingsService.getSetting(settingName);
     }
 
     @PUT

@@ -4,6 +4,10 @@ import com.fifaminer.client.FifaMinerClient;
 import com.fifaminer.client.dto.Duration;
 import com.fifaminer.client.dto.OrderingTypeTO;
 import com.fifaminer.client.dto.Platform;
+import com.fifaminer.client.dto.strategy.MaxBuyStrategy;
+import com.fifaminer.client.dto.strategy.PriceStrategy;
+import com.fifaminer.client.dto.strategy.SellBuyNowStrategy;
+import com.fifaminer.client.dto.strategy.SellStartStrategy;
 import jersey.repackaged.com.google.common.collect.ImmutableList;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -35,5 +39,9 @@ public class FifaMinerClientImplTest {
         fifaMinerClient.getPricesSummaryForPlayers(
                 ImmutableList.of(172879L, 193352L, 164468L, 183285L, 152554L)
         );
+        fifaMinerClient.enableMaxBuyPriceStrategy(MaxBuyStrategy.REDUCE_10_FROM_CURRENT_MIN);
+        fifaMinerClient.enableSellBuyNowPriceStrategy(SellBuyNowStrategy.ONE_BID_LESS_THAN_FIRST_MAXIMUM);
+        fifaMinerClient.enableSellStartPriceStrategy(SellStartStrategy.LOWER_FEW_BIDS_FROM_BUY_NOW_PRICE);
+        fifaMinerClient.getActiveStrategy(PriceStrategy.MAX_BUY_PRICE);
     }
 }

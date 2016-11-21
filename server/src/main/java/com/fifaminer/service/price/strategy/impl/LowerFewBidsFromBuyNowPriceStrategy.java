@@ -1,4 +1,4 @@
-package com.fifaminer.service.price.impl;
+package com.fifaminer.service.price.strategy.impl;
 
 import com.fifaminer.service.price.PriceBoundService;
 import com.fifaminer.service.price.SellStartPriceStrategy;
@@ -6,11 +6,6 @@ import com.fifaminer.service.price.type.BoundSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * User: Dimitr
- * Date: 17.11.2016
- * Time: 21:14
- */
 @Component
 public class LowerFewBidsFromBuyNowPriceStrategy implements SellStartPriceStrategy {
 
