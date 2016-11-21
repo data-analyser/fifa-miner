@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PriceActualityPolicy {
 
-    private static final int ACTUALITY_LIMIT_IN_HOURS = 3;
+    private static final int ACTUALITY_LIMIT_IN_HOURS = 1;
 
     public boolean isActualPrices(Long lastDistributionTime) {
         Long timeLimit = calculateTimeLimit();

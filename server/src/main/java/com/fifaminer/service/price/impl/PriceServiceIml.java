@@ -21,7 +21,7 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static com.fifaminer.service.setting.type.Setting.*;
+import static com.fifaminer.client.dto.strategy.PriceStrategy.*;
 import static java.lang.Long.compare;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
@@ -161,9 +161,9 @@ public class PriceServiceIml implements PriceService {
         PlayerPrice playerPrice = new PlayerPrice(
                 playerId, maxBuyNowPrice, sellStartPrice,
                 sellBuyNowPrice, startProfit, buyNowProfit,
-                settingsService.getSetting(MAX_BUY_PRICE_STRATEGY),
-                settingsService.getSetting(SELL_START_PRICE_STRATEGY),
-                settingsService.getSetting(SELL_BUY_NOW_PRICE_STRATEGY)
+                settingsService.getSetting(MAX_BUY_PRICE.name()),
+                settingsService.getSetting(SELL_START_PRICE.name()),
+                settingsService.getSetting(SELL_BUY_NOW_PRICE.name())
         );
 
         log.info("Calculated prices summary = {}", playerPrice);

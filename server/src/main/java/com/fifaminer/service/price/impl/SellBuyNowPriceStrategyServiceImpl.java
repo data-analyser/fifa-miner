@@ -16,7 +16,7 @@ public class SellBuyNowPriceStrategyServiceImpl implements SellBuyNowPriceStrate
     private final SettingsService settingsService;
     private final Map<String, SellBuyNowPriceStrategy> sellBuyNowPriceStrategies;
 
-    private static final String DEFAULT_STRATEGY = "oneBidLessThanFirstMaximum";
+    private static final String DEFAULT_STRATEGY = "oneBidLessThanFirstMaximumStrategy";
 
     @Autowired
     public SellBuyNowPriceStrategyServiceImpl(SettingsService settingsService,
