@@ -182,7 +182,10 @@ public class PriceServiceIml implements PriceService {
     private Long getLastDistributionTime(Long playerId) {
         PriceHistory priceHistory = priceHistoryService.findByPlayerId(playerId);
 
-        if (isNull(priceHistory) || isEmpty(priceHistory.getHistory())) return LONG_ZERO;
+        if (isNull(priceHistory) || isEmpty(priceHistory.getHistory())){
+            log.info("Cannot find price history for player id = {}", playerId);
+            return LONG_ZERO;
+        }
 
         return priceHistory.getHistory().entrySet()
                 .stream()
