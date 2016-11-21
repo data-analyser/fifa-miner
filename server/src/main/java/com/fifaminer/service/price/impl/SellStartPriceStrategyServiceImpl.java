@@ -1,7 +1,7 @@
 package com.fifaminer.service.price.impl;
 
-import com.fifaminer.service.price.SellStartPriceStrategy;
-import com.fifaminer.service.price.strategy.SellStartPriceStrategyService;
+import com.fifaminer.service.price.strategy.SellStartPriceStrategy;
+import com.fifaminer.service.price.SellStartPriceStrategyService;
 import com.fifaminer.service.setting.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

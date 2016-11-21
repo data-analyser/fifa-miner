@@ -1,7 +1,7 @@
 package com.fifaminer.service.price.strategy.impl;
 
 import com.fifaminer.service.price.PriceBoundService;
-import com.fifaminer.service.price.SellStartPriceStrategy;
+import com.fifaminer.service.price.strategy.SellStartPriceStrategy;
 import com.fifaminer.service.price.type.BoundSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

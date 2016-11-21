@@ -1,4 +1,4 @@
-package com.fifaminer.service.price;
+package com.fifaminer.service.price.strategy;
 
 public interface SellStartPriceStrategy {
 
