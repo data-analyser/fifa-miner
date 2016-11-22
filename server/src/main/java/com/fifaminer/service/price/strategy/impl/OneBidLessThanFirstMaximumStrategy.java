@@ -17,38 +17,49 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import static com.fifaminer.service.price.strategy.impl.MicroTradeSellStrategy.MAX_MICRO_TRADE_PRICE;
 import static com.google.common.collect.Ordering.natural;
 import static java.util.Collections.min;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 @Component
 public class OneBidLessThanFirstMaximumStrategy implements SellBuyNowPriceStrategy {
 
     private final PriceBoundService priceBoundService;
     private final PriceStatisticsService priceStatisticsService;
+    private final MicroTradeSellStrategy microTradeSellStrategy;
     private final ClockService clockService;
 
     private static final int BID_STEPS = 1;
     private static final int PROCESSABLE_DEVIATIONS = 2;
     private static final int MIN_PRICE_DISTRIBUTION_SIZE = 2;
+    private static final int MINIMAL_PROFIT_BIDS = 3;
 
     public OneBidLessThanFirstMaximumStrategy(PriceBoundService priceBoundService,
                                               PriceStatisticsService priceStatisticsService,
+                                              MicroTradeSellStrategy microTradeSellStrategy,
                                               ClockService clockService) {
         this.priceBoundService = priceBoundService;
         this.priceStatisticsService = priceStatisticsService;
+        this.microTradeSellStrategy = microTradeSellStrategy;
         this.clockService = clockService;
     }
 
     @Override
     public Integer calculate(SellBuyNowPriceDefinitionContext context) {
-        List<PricesDistribution> pricesDistribution = getPricesLessThanMedianAndMoreThanMin(
-                context.getPricesDistribution()
-        );
-
-        if (pricesDistribution.size() == 0) {
-            return min(context.getPricesDistribution().keySet());
+        Integer minPrice = min(context.getPricesDistribution().keySet());
+        if (minPrice < MAX_MICRO_TRADE_PRICE) {
+            return microTradeSellStrategy.calculate(context);
         }
+        return applyStrategy(context.getPricesDistribution());
+    }
+
+    private Integer applyStrategy(Map<Integer, Integer> priceDistribution) {
+        List<PricesDistribution> pricesDistribution = getPricesLessThanMedianAndMoreThanMin(priceDistribution);
+
+        if (isEmpty(pricesDistribution))
+            return priceBoundService.arrangeToSteps(min(priceDistribution.keySet()), MINIMAL_PROFIT_BIDS, BoundSelection.HIGHER);
 
         if (pricesDistribution.size() <= MIN_PRICE_DISTRIBUTION_SIZE)
             return getMinimalSellersPrice(pricesDistribution);
