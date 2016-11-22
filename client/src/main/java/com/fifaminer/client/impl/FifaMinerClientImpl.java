@@ -89,15 +89,19 @@ public class FifaMinerClientImpl implements FifaMinerClient {
     public List<Long> findPlayersByTransactionsAnalyse(Long startTime,
                                                        Long endTime,
                                                        OrderingTypeTO orderingTypeTO,
+                                                       String tagName,
                                                        Integer limit) {
-        return client.resource(getUrl(buildPlayerTransactionsRequestUrl(startTime, endTime, orderingTypeTO, limit)))
+        return client.resource(getUrl(buildPlayerTransactionsRequestUrl(startTime, endTime, orderingTypeTO, tagName, limit)))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<Long>>() {});
     }
 
     @Override
-    public List<Long> findPlayersByTransactionsAnalyse(Duration duration, OrderingTypeTO orderingTypeTO, Integer limit) {
-        return client.resource(getUrl(buildDurationPlayerTransactionsRequestUrl(duration, orderingTypeTO, limit)))
+    public List<Long> findPlayersByTransactionsAnalyse(Duration duration,
+                                                       OrderingTypeTO orderingTypeTO,
+                                                       String tagName,
+                                                       Integer limit) {
+        return client.resource(getUrl(buildDurationPlayerTransactionsRequestUrl(duration, orderingTypeTO, tagName, limit)))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<Long>>() {});
     }
@@ -158,10 +162,12 @@ public class FifaMinerClientImpl implements FifaMinerClient {
 
     private String buildDurationPlayerTransactionsRequestUrl(Duration duration,
                                                              OrderingTypeTO orderingTypeTO,
+                                                             String tagName,
                                                              Integer limit) {
         return UriBuilder.fromPath("/player-transactions/duration")
                 .queryParam("duration", duration)
                 .queryParam("orderingType", orderingTypeTO)
+                .queryParam("tagName", tagName)
                 .queryParam("limit", limit)
                 .build()
                 .toString();
@@ -170,11 +176,13 @@ public class FifaMinerClientImpl implements FifaMinerClient {
     private String buildPlayerTransactionsRequestUrl(Long startTime,
                                                      Long endTime,
                                                      OrderingTypeTO orderingTypeTO,
+                                                     String tagName,
                                                      Integer limit) {
         return UriBuilder.fromPath("/player-transactions/range")
                 .queryParam("startTime", startTime)
                 .queryParam("endTime", endTime)
                 .queryParam("orderingType", orderingTypeTO)
+                .queryParam("tagName", tagName)
                 .queryParam("limit", limit)
                 .build()
                 .toString();
