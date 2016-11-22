@@ -32,9 +32,9 @@ public class FifaMinerClientImplTest {
         fifaMinerClient.getPricesSummary(20800L);
         fifaMinerClient.getPriceLimits(20800L, Platform.PC);
         fifaMinerClient.findPlayersByTransactionsAnalyse(
-                1477574603286L, 1479064949173L, OrderingTypeTO.MAX_SELLS, 5
+                1477574603286L, 1479064949173L, OrderingTypeTO.MAX_SELLS, "some-tag", 5
         );
-        fifaMinerClient.findPlayersByTransactionsAnalyse(Duration.TODAY, OrderingTypeTO.MAX_SELLS, 5);
+        fifaMinerClient.findPlayersByTransactionsAnalyse(Duration.TODAY, OrderingTypeTO.MAX_SELLS, "some-tag", 5);
         fifaMinerClient.isPriceDistributionActual(20800L);
         fifaMinerClient.getPricesSummaryForPlayers(
                 ImmutableList.of(172879L, 193352L, 164468L, 183285L, 152554L)
