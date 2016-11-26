@@ -28,7 +28,6 @@ public class PlayerGroupServiceIml implements PlayerGroupService {
     public List<Long> findPlayersByGroup(String groupName) {
         PlayerGroup playerGroup = playerGroupRepository.findOne(groupName);
         return isNull(playerGroup) ? emptyList() : transformToList(playerGroup.getPlayerIds());
-
     }
 
     @Override
