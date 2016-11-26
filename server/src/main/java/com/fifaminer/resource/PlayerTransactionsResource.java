@@ -33,10 +33,10 @@ public class PlayerTransactionsResource {
     public List<Long> findPlayersByTimeRange(@QueryParam("startTime") Long startTime,
                                              @QueryParam("endTime") Long endTime,
                                              @QueryParam("orderingType") OrderingTypeTO orderingTypeTO,
-                                             @QueryParam("tagName") String tagName,
+                                             @QueryParam("groupName") String groupName,
                                              @QueryParam("limit") Integer limit) {
         return playerTransactionsService.findPlayers(
-                startTime, endTime, OrderingType.valueOf(orderingTypeTO.name()), tagName, limit
+                startTime, endTime, OrderingType.valueOf(orderingTypeTO.name()), groupName, limit
         );
     }
 
@@ -45,10 +45,10 @@ public class PlayerTransactionsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Long> findPlayersByDuration(@QueryParam("duration") Duration duration,
                                             @QueryParam("orderingType") OrderingTypeTO orderingTypeTO,
-                                            @QueryParam("tagName") String tagName,
+                                            @QueryParam("groupName") String groupName,
                                             @QueryParam("limit") Integer limit) {
         return playerTransactionsService.findPlayers(
-                duration, OrderingType.valueOf(orderingTypeTO.name()), tagName, limit
+                duration, OrderingType.valueOf(orderingTypeTO.name()), groupName, limit
         );
     }
 }

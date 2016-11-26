@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PlayerTransactionsService {
 
-    List<Long> findPlayers(Long startTime, Long endTime, OrderingType orderingType, String tagName, Integer limit);
+    List<Long> findPlayers(Long startTime, Long endTime, OrderingType orderingType, String groupName, Integer limit);
 
-    List<Long> findPlayers(Duration duration, OrderingType orderingType, String tagName, Integer limit);
+    List<Long> findPlayers(Duration duration, OrderingType orderingType, String groupName, Integer limit);
 }
