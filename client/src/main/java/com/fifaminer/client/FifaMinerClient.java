@@ -41,5 +41,7 @@ public interface FifaMinerClient {
     void enableSellBuyNowPriceStrategy(SellBuyNowStrategy sellBuyNowStrategy);
 
     String getActiveStrategy(PriceStrategy priceStrategy);
+
+    String findMostProspectivePlayers(LeagueType leagueType, PlayerAttribute playerAttribute, Integer limit);
 }
 
