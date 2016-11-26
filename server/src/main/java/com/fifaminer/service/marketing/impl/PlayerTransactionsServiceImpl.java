@@ -43,10 +43,10 @@ public class PlayerTransactionsServiceImpl implements PlayerTransactionsService 
     public List<Long> findPlayers(Long startTime,
                                   Long endTime,
                                   OrderingType orderingType,
-                                  String tagName,
+                                  String groupName,
                                   Integer limit) {
-        log.info("Select players by transactions analyse start time = {}, end time = {}, ordering type = {}, tagName = {}, limit = {}",
-                startTime, endTime, orderingType, tagName, limit);
+        log.info("Select players by transactions analyse start time = {}, end time = {}, ordering type = {}, groupName = {}, limit = {}",
+                startTime, endTime, orderingType, groupName, limit);
         return transactionService.findRecordsWhereTimestampBetween(startTime, endTime)
                 .stream()
                 .filter(transaction -> transaction.getRecords().size() >= MIN_TRANSACTIONS_COUNT_FOR_ANALYSE)
@@ -60,13 +60,13 @@ public class PlayerTransactionsServiceImpl implements PlayerTransactionsService 
     @Override
     public List<Long> findPlayers(Duration duration,
                                   OrderingType orderingType,
-                                  String tagName,
+                                  String groupName,
                                   Integer limit) {
-        log.info("Select players by transactions analyse duration = {}, ordering type = {}, tagName = {}, limit = {}",
-                duration, orderingType, tagName, limit);
+        log.info("Select players by transactions analyse duration = {}, ordering type = {}, groupName = {}, limit = {}",
+                duration, orderingType, groupName, limit);
         TimeRange timeRange = timeRangeService.fromDuration(duration);
         return findPlayers(
-                timeRange.getStartTime(), timeRange.getEndTime(), orderingType, tagName, limit
+                timeRange.getStartTime(), timeRange.getEndTime(), orderingType, groupName, limit
         );
     }
 }
