@@ -1,9 +1,7 @@
 package com.fifaminer.client.impl;
 
 import com.fifaminer.client.FifaMinerClient;
-import com.fifaminer.client.dto.Duration;
-import com.fifaminer.client.dto.OrderingTypeTO;
-import com.fifaminer.client.dto.Platform;
+import com.fifaminer.client.dto.*;
 import com.fifaminer.client.dto.strategy.MaxBuyStrategy;
 import com.fifaminer.client.dto.strategy.PriceStrategy;
 import com.fifaminer.client.dto.strategy.SellBuyNowStrategy;
@@ -43,5 +41,6 @@ public class FifaMinerClientImplTest {
         fifaMinerClient.enableSellBuyNowPriceStrategy(SellBuyNowStrategy.ONE_BID_LESS_THAN_FIRST_MAXIMUM);
         fifaMinerClient.enableSellStartPriceStrategy(SellStartStrategy.LOWER_FEW_BIDS_FROM_BUY_NOW_PRICE);
         fifaMinerClient.getActiveStrategy(PriceStrategy.MAX_BUY_PRICE);
+        fifaMinerClient.findMostProspectivePlayers(LeagueType.PREMIER_LEAGUE, PlayerAttribute.PACE, 50);
     }
 }

@@ -3,6 +3,7 @@ package com.fifaminer.service.marketing.impl;
 import com.fifaminer.client.dto.Duration;
 import com.fifaminer.service.common.TimeRangeService;
 import com.fifaminer.service.common.model.TimeRange;
+import com.fifaminer.service.group.PlayerGroupService;
 import com.fifaminer.service.marketing.PlayerTransactionsService;
 import com.fifaminer.service.marketing.strategy.PlayerSortingFactory;
 import com.fifaminer.service.marketing.type.OrderingType;
@@ -25,6 +26,7 @@ public class PlayerTransactionsServiceImpl implements PlayerTransactionsService 
     private final TransactionService transactionService;
     private final PlayerSortingFactory sortingTypeFactory;
     private final TimeRangeService timeRangeService;
+    private final PlayerGroupService playerGroupService;
 
     private static final Integer MIN_TRANSACTIONS_COUNT_FOR_ANALYSE = 10;
 
@@ -32,11 +34,13 @@ public class PlayerTransactionsServiceImpl implements PlayerTransactionsService 
     public PlayerTransactionsServiceImpl(TransactionAnalysingService transactionAnalysingService,
                                          TransactionService transactionService,
                                          PlayerSortingFactory sortingTypeFactory,
-                                         TimeRangeService timeRangeService) {
+                                         TimeRangeService timeRangeService,
+                                         PlayerGroupService playerGroupService) {
         this.transactionAnalysingService = transactionAnalysingService;
         this.transactionService = transactionService;
         this.sortingTypeFactory = sortingTypeFactory;
         this.timeRangeService = timeRangeService;
+        this.playerGroupService = playerGroupService;
     }
 
     @Override
@@ -47,8 +51,11 @@ public class PlayerTransactionsServiceImpl implements PlayerTransactionsService 
                                   Integer limit) {
         log.info("Select players by transactions analyse start time = {}, end time = {}, ordering type = {}, groupName = {}, limit = {}",
                 startTime, endTime, orderingType, groupName, limit);
+
+        List<Long> playersByGroup = playerGroupService.findPlayersByGroup(groupName);
         return transactionService.findRecordsWhereTimestampBetween(startTime, endTime)
                 .stream()
+                .filter(transaction -> playersByGroup.contains(transaction.getPlayerId()))
                 .filter(transaction -> transaction.getRecords().size() >= MIN_TRANSACTIONS_COUNT_FOR_ANALYSE)
                 .map(transactionAnalysingService::analyse)
                 .sorted(sortingTypeFactory.create(orderingType))

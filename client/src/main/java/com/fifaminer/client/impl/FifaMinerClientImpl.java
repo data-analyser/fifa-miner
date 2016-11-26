@@ -154,6 +154,24 @@ public class FifaMinerClientImpl implements FifaMinerClient {
                 .get(String.class);
     }
 
+    @Override
+    public String findMostProspectivePlayers(LeagueType leagueType, PlayerAttribute playerAttribute, Integer limit) {
+        return client.resource(getUrl(buildProspectivePlayers(leagueType, playerAttribute, limit)))
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .get(String.class);
+    }
+
+    private String buildProspectivePlayers(LeagueType leagueType,
+                                           PlayerAttribute playerAttribute,
+                                           Integer limit) {
+        return UriBuilder.fromPath("/marketing/prospective-players")
+                .queryParam("leagueType", leagueType)
+                .queryParam("playerAttribute", playerAttribute)
+                .queryParam("limit", limit)
+                .build()
+                .toString();
+    }
+
     private void enableStrategy(String strategyType, String strategyName) {
         client.resource(getUrl("/settings"))
                 .type(MediaType.APPLICATION_JSON_TYPE)
